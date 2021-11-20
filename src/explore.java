@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class explore // alpha 2.2
 {
@@ -66,6 +64,100 @@ public class explore // alpha 2.2
         return success;
     }
 
+// fight functions
+
+    private static boolean graveyard_hero(ArrayList<hero> fighters)
+    {
+        for (int fighter = fighters.size() - 1; fighter >= 0; fighter--)
+        {
+            if (fighters.get(fighter).HP <= 0)
+            {
+                fighters.remove(fighter);
+            }
+        }
+        return fighters.size() == 0;
+    }
+    private static boolean graveyard_monster(ArrayList<monster> fighters)
+    {
+        for (int fighter = fighters.size() - 1; fighter >= 0; fighter--)
+        {
+            if (fighters.get(fighter).HP <= 0)
+            {
+                fighters.remove(fighter);
+            }
+        }
+        return fighters.size() == 0;
+    }
+
+    private static void turn_attacks_hero(ArrayList<hero> company, ArrayList<monster> enemy)
+    {
+        // before player attack we remove effects from enemy
+        for (monster fighter : enemy)
+        {
+            fighter.turn_pool = fighter.dice_pool;
+        }
+        // before player attacks we apply effects from players attack to their attacks
+        for (hero fighter : company)
+        {
+            fighter.generate_strategy();
+        }
+
+        for (hero fighter : company)
+        {
+            for (int action = 0; action < fighter.attack_speed; action++)
+            {
+                int target = (int) (Math.random() * enemy.size());
+
+                int success = attack(fighter.strategy.get(action));
+
+                for (int i = 0; i < success; i++)
+                {
+                    enemy.get(target).HP -= 1;
+                }
+
+                if (success > 0)
+                {
+                    fighter.effect(enemy.get(target).turn_pool, action);
+                }
+            }
+        }
+    }
+
+    private static void turn_attacks_monster(ArrayList<monster> enemy, ArrayList<hero> company)
+    {
+        // before enemy attack we remove effects from players
+        for (hero fighter : company)
+        {
+            fighter.turn_pool = fighter.dice_pool;
+        }
+        // before enemy attack we aplly effects from players attack to their attacks
+        for (monster fighter : enemy)
+        {
+            fighter.generate_strategy();
+        }
+
+
+        for (monster fighter : enemy)  // monster attacks
+        {
+            for (int action = 0; action < fighter.attack_speed; action++)
+            {
+                int target = (int)(Math.random() * company.size());
+
+                int success = attack(fighter.strategy.get(action));
+
+                for (int i = 0; i < success; i++)
+                {
+                    company.get(target).HP -= 1;
+                }
+
+                if (success > 0)
+                {
+                    fighter.effect(company.get(target).turn_pool, action);
+                }
+            }
+        }
+    }
+
 
     static boolean fight(ArrayList<hero> company, ArrayList<monster> enemy)
     {
@@ -76,7 +168,6 @@ public class explore // alpha 2.2
             challenge += fighter.level;
         }
 
-
         //enemy.get(0).printing_all_stats();
 
         // fighting
@@ -84,17 +175,6 @@ public class explore // alpha 2.2
         for (int rounds = 1; rounds < 50; rounds++)
         {
             int choice = input.choice();
-
-            // before player attack we remove effects from enemy
-            for (monster fighter : enemy)
-            {
-                fighter.turn_pool = fighter.dice_pool;
-            }
-            // before player attacks we apply effects from players attack to their attacks
-            for (hero fighter : company)
-            {
-                fighter.generate_strategy();
-            }
 
             switch (choice)
             {
@@ -109,38 +189,10 @@ public class explore // alpha 2.2
                 {
                     // player attacks
                     // random targets for now
-                    for (hero fighter : company)
-                    {
-                        for (int action = 0; action < fighter.attack_speed; action++)
-                        {
-                            int target = (int) (Math.random() * enemy.size());
+                    turn_attacks_hero(company, enemy);
 
-                            int success = attack(fighter.strategy.get(action));
-
-                            for (int i = 0; i < success; i++)
-                            {
-                                enemy.get(target).HP -= 1;
-
-                            }
-                            if (success > 0)
-                            {
-                                fighter.effect(enemy.get(target).turn_pool, action);
-                            }
-                        }
-
-                    }
                     // checking dead enemy
-
-                    for (int fighter = enemy.size() - 1; fighter >= 0; fighter--)
-                    {
-                        if (enemy.get(fighter).HP <= 0)
-                        {
-                            enemy.remove(fighter);
-                        }
-                    }
-
-
-                    if (enemy.size() == 0)
+                    if (graveyard_monster(enemy))
                     {
                         output.println("You have won this fight");
                         company.get(0).experience(challenge);
@@ -149,51 +201,10 @@ public class explore // alpha 2.2
                 }
             }
 
-            // before enemy attack we remove effects from players
-            for (hero fighter : company)
-            {
-                fighter.turn_pool = fighter.dice_pool;
-            }
-            // before enemy attack we aplly effects from players attack to their attacks
-            for (monster fighter : enemy)
-            {
-                fighter.generate_strategy();
-            }
-
-            for (monster fighter : enemy)  // monster attacks
-            {
-                for (int action = 0; action < fighter.attack_speed; action++)
-                {
-                    int target = (int)(Math.random() * company.size());
-
-                    int success = attack(fighter.strategy.get(action));
-
-                    for (int i = 0; i < success; i++)
-                    {
-                        company.get(target).HP -= 1;
-
-                    }
-                    if (success > 0)
-                    {
-                        fighter.effect(company.get(target).turn_pool, action);
-                    }
-
-
-                }
-
-            }
+            turn_attacks_monster(enemy, company);
 
             // checking dead in company
-
-            for (int fighter = company.size()-1; fighter >= 0; fighter--)
-            {
-                if (company.get(fighter).HP <= 0)
-                {
-                    company.remove(fighter);
-                }
-            }
-
-            if (company.size() == 0)
+            if (graveyard_hero(company))
             {
                 output.println("Your company has been defeated GAME OVER");
                 System.exit(666);
