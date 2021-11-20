@@ -6,24 +6,19 @@ abstract class unit // alpha 2.1
     int AG;  // AGILITY number of additional dices
     int INT; // INTELLIGENCE number of additional effects
 
-    int HP;  // health points used only by hero
+    int HP;  // health points
     int max_HP;
 
     item artefact;  // only one object item can be assigned to a unit
 
     ArrayList<Integer> dice_pool = new ArrayList<>();  // full list of dices used to generate strategy
 
-    ArrayList<ArrayList<Integer>> strategy;  // 3 lists of dices used for fighting
+
+    ArrayList<ArrayList<Integer>> strategy;  // lists of dices used for fighting
+
+    int attack_speed; // number of lists in strategy
 
 
-    // place for storing effects
-    // powers
-    // value  -- USAGES - targeted_dice
-    // edge   -- USAGES - power_of_change
-    // random -- USAGES - power_of_change
-
-    // *usages* + *power_name* + *value*
-    //ex.  3edge1 or maybe 321
 
     ArrayList<effect> effects_pool = new ArrayList<>();  // full list of dices used to generate strategy
 
@@ -31,9 +26,11 @@ abstract class unit // alpha 2.1
 
     unit()
     {// this works before Hero()
-        strategy = new ArrayList<>(3); // creation of 3 rounds
-        magic = new ArrayList<>(3); // creation of 3 rounds
-        for(int i=0; i < 3; i++)
+        attack_speed = 1; // every unit has at least 1 attack
+
+        strategy = new ArrayList<>(attack_speed);
+        magic = new ArrayList<>(attack_speed);
+        for(int i=0; i < attack_speed; i++)
         {
             strategy.add(new ArrayList());
             magic.add(new ArrayList());
@@ -83,19 +80,23 @@ abstract class unit // alpha 2.1
 
     public void generate_strategy()
     {
-        int counter = 0;
-        for (int i = 0; i < 3; i++)
+        // adjusting attack speed
+
+        for (int i = 0; i < attack_speed; i++)
         {
+
             strategy.get(i).clear();
             magic.get(i).clear();
         }
+
+        int counter = 0;
 
         // place where strategy is generated
         for (int i = 0; i < dice_pool.size(); i++)
         {
             strategy.get(counter).add(dice_pool.get(i));
             counter += 1;
-            if (counter == 3)
+            if (counter == attack_speed)
             {
                 counter = 0;
             }
@@ -104,7 +105,7 @@ abstract class unit // alpha 2.1
         {
             magic.get(counter).add(effects_pool.get(i));
             counter += 1;
-            if (counter == 3)
+            if (counter == attack_speed)
             {
                 counter = 0;
             }

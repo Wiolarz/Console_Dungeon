@@ -98,7 +98,7 @@ public class tester // 2.2
                 hero player = new hero();
                 monster enemy = new monster(level);
                 //quest_object.print_info();
-                System.out.println(explore.fight(player, enemy));
+                //System.out.println(explore.fight(player, enemy));
             }
 
             return true;

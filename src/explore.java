@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 public class explore // alpha 2.2
 {
-    static void walk(hero player, location place, int day)
+    static void walk(ArrayList<hero> company, location place, int day)
     { // takes
-
         for (int i = 0; i < balance.events; i++)
         {
             int event = (int)(Math.random() * 10);
@@ -14,7 +13,7 @@ public class explore // alpha 2.2
             if ((event <= place.quest_enemy) && (balance.main_quest.target_place == place.id))
             {
                 output.println("event related enemy");
-                if(fight(player, generate_enemy(place.quest_level)))
+                if(fight(company, generate_enemy(place.quest_level)))
                 {
                     output.println("You won");
                     output.println("New quest: ");
@@ -25,10 +24,10 @@ public class explore // alpha 2.2
             else if(event <= place.chest_chance)
             {
                 output.println("You found a chest");
-                chest(player, place.chest_gold);
+                chest(company, place.chest_gold);
             } else {
                 output.println("You fight");
-                fight(player, generate_enemy(place.level));
+                fight(company, generate_enemy(place.level));
             }
         }
     }
@@ -36,9 +35,9 @@ public class explore // alpha 2.2
 
 
 
-    static void chest(hero player, int quality)
+    static void chest(ArrayList<hero> company, int quality)
     { // event during exploring which rewards player
-        player.gold += quality;
+        company.get(0).gold += quality;
     }
 
 
@@ -49,62 +48,67 @@ public class explore // alpha 2.2
 
 
 
-    static boolean round(hero player, monster enemy, int turn)
+    static int attack(ArrayList<Integer> dice_pool)
     {
-        ArrayList<Integer> p = player.strategy.get(turn);
-        ArrayList<Integer> e = enemy.strategy.get(turn);
+        int score = unit.attack(dice_pool);
 
-        p = enemy.effect(p, turn); // problem, there is no, round aligned effects possible
-        e = player.effect(e, turn);
-
-
-        int p_score = unit.attack(p);
-        int e_score = unit.attack(e);
-
-        if(turn != 2){
-            return p_score >= e_score;
-        } else {
-            return p_score > e_score;
+        // counting number of successes
+        int success = 0;
+        int difficulty = 6;
+        while (difficulty < score)
+        {
+            score -= difficulty;
+            difficulty = (int)(difficulty * 1.5);
+            success++;
         }
+        return success;
     }
 
 
-    static boolean fight(hero player, monster enemy)
-    {// number of won rounds, if player wins 2 rounds he wins
-        int p = 0;
-
+    static boolean fight(ArrayList<hero> company, monster enemy)
+    {
         enemy.printing_all_stats();
 
         // fighting
-        // each side rolls their dices and we check who had higher score
-        int[] score = {0, 0};
-        for (int turn = 0; true; turn++)
-        {
-            if (round(player, enemy, turn))
-            {
-                score[0]++;
-            }
-            else
-            {
-                score[1]++;
-            }
-            if (score[0] == 2)
-            { // when player reaches 2 wins,
-                output.println("Final score: " + Arrays.toString(score));
-                player.experience(enemy.level);
-                return true;
-            } else if (score[1] == 2)
-            {
-                output.println("Final score: " + Arrays.toString(score));
-                player.damage(enemy.level);
-                return false;
-            }
-        }
 
+        while (enemy.HP > 0)
+        {
+            int choice = input.choice();
+
+            switch (choice)
+            {
+                case 1: // escape attempt
+                {
+                    // basic roll for each fighter, if player side succeeds
+                    //if success return false
+                    break;
+                }
+                case 2:
+                {
+                    // player attacks
+                    int success = attack(company.get(0).strategy.get(0));
+                    for (int i = 0; i < success; i++)
+                    {
+                        enemy.HP -= 1;
+                    }
+
+                    break;
+                }
+            }
+            
+            if (enemy.HP <= 0)
+            {
+                break;
+            }
+
+            company.get(0).damage(attack(enemy.strategy.get(0)));
+        }
+        company.get(0).experience(enemy.level);
+        return true;
     }
 
 
-    static boolean walking(hero player, ArrayList<location> world, int day)
+    static boolean walking(ArrayList<hero> company, ArrayList<location> world, int day)
     {
         int choice = 0;
 
@@ -124,7 +128,7 @@ public class explore // alpha 2.2
             if (choice == 1) return false; // exit world map
             else if (choice > 1) // enter location
             {
-                walk(player, world.get(choice - 2), day);
+                walk(company, world.get(choice - 2), day);
                 return true;
             }
         }

@@ -124,10 +124,12 @@ public class hero extends unit // alpha 2.2
         System.out.print("MAGIC: ");
         for (ArrayList<effect> spell_list : magic)
         {
+            output.print("[");
             for (effect spell : spell_list)
             {
                 output.print(spell.short_print());
             }
+            output.print("] ");
         }
         System.out.println();
         System.out.println("Gold: " + gold + " Level: " + level + " Exp: " + exp);
