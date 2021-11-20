@@ -142,14 +142,4 @@ public class hero extends unit // alpha 2.2
             HP = max_HP;
         }
     }
-
-    public void damage(int value)
-    {
-        // Health points reduction
-        HP -= value;
-        if (HP <= 0){
-            System.out.println("YOU DIED");
-            System.exit(666);
-        }
-    }
 }

@@ -23,6 +23,24 @@ and also have a requirement to succeed and also have multiple success levels EXA
 Shield - min 4 each next *1,5 (6, 9, 13, 19) each success grants 1 hit damage less for the next turn
 
 
+
+TODO:
+number of enemy monsters based on presets but related to their level
+
+create static function in hero class to generate mercenary
+remove "game-over" from death in hero class, introduce it -> in removing last member from company array
+
+Change checks in to enemy array being empty
+
+add removing enemy from an array if his hp 0
+
+
+
+PROBLEMS:
+someone who attacks first, most of the time applies effects making enemy less likely to apply their effects back
+making each fight have a big advantage for the attacker
+
+
 */
 
 

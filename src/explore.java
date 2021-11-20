@@ -69,44 +69,138 @@ public class explore // alpha 2.2
 
     static boolean fight(ArrayList<hero> company, ArrayList<monster> enemy)
     {
-        enemy.get(0).printing_all_stats();
+        // measure the challenge level
+        int challenge = 0;
+        for (monster fighter : enemy)
+        {
+            challenge += fighter.level;
+        }
+
+
+        //enemy.get(0).printing_all_stats();
 
         // fighting
 
-        while (enemy.get(0).HP > 0)
+        for (int rounds = 1; rounds < 50; rounds++)
         {
             int choice = input.choice();
 
+            // before player attack we remove effects from enemy
+            for (monster fighter : enemy)
+            {
+                fighter.turn_pool = fighter.dice_pool;
+            }
+            // before player attacks we apply effects from players attack to their attacks
+            for (hero fighter : company)
+            {
+                fighter.generate_strategy();
+            }
+
             switch (choice)
             {
-                case 1: // escape attempt
+                case 1 -> // escape attempt
                 {
                     // basic roll for each fighter, if player side succeeds
                     //if success return false
-                    break;
+                    return false;
                 }
-                case 2:
+
+                case 2 ->
                 {
                     // player attacks
-                    int success = attack(company.get(0).strategy.get(0));
-                    for (int i = 0; i < success; i++)
+                    // random targets for now
+                    for (hero fighter : company)
                     {
-                        enemy.get(0).HP -= 1;
+                        for (int action = 0; action < fighter.attack_speed; action++)
+                        {
+                            int target = (int) (Math.random() * enemy.size());
+
+                            int success = attack(fighter.strategy.get(action));
+
+                            for (int i = 0; i < success; i++)
+                            {
+                                enemy.get(target).HP -= 1;
+
+                            }
+                            if (success > 0)
+                            {
+                                fighter.effect(enemy.get(target).turn_pool, action);
+                            }
+                        }
+
+                    }
+                    // checking dead enemy
+
+                    for (int fighter = enemy.size() - 1; fighter >= 0; fighter--)
+                    {
+                        if (enemy.get(fighter).HP <= 0)
+                        {
+                            enemy.remove(fighter);
+                        }
                     }
 
-                    break;
+
+                    if (enemy.size() == 0)
+                    {
+                        output.println("You have won this fight");
+                        company.get(0).experience(challenge);
+                        return true;
+                    }
                 }
             }
-            
-            if (enemy.get(0).HP <= 0)
+
+            // before enemy attack we remove effects from players
+            for (hero fighter : company)
             {
-                break;
+                fighter.turn_pool = fighter.dice_pool;
+            }
+            // before enemy attack we aplly effects from players attack to their attacks
+            for (monster fighter : enemy)
+            {
+                fighter.generate_strategy();
             }
 
-            company.get(0).damage(attack(enemy.get(0).strategy.get(0)));
+            for (monster fighter : enemy)  // monster attacks
+            {
+                for (int action = 0; action < fighter.attack_speed; action++)
+                {
+                    int target = (int)(Math.random() * company.size());
+
+                    int success = attack(fighter.strategy.get(action));
+
+                    for (int i = 0; i < success; i++)
+                    {
+                        company.get(target).HP -= 1;
+
+                    }
+                    if (success > 0)
+                    {
+                        fighter.effect(company.get(target).turn_pool, action);
+                    }
+
+
+                }
+
+            }
+
+            // checking dead in company
+
+            for (int fighter = company.size()-1; fighter >= 0; fighter--)
+            {
+                if (company.get(fighter).HP <= 0)
+                {
+                    company.remove(fighter);
+                }
+            }
+
+            if (company.size() == 0)
+            {
+                output.println("Your company has been defeated GAME OVER");
+                System.exit(666);
+            }
+
         }
-        company.get(0).experience(enemy.get(0).level);
-        return true;
+        return false; // a draw
     }
 
 

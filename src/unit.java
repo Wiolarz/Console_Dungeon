@@ -12,6 +12,7 @@ abstract class unit // alpha 2.1
     item artefact;  // only one object item can be assigned to a unit
 
     ArrayList<Integer> dice_pool = new ArrayList<>();  // full list of dices used to generate strategy
+    ArrayList<Integer> turn_pool = new ArrayList<>();
 
 
     ArrayList<ArrayList<Integer>> strategy;  // lists of dices used for fighting
@@ -52,6 +53,7 @@ abstract class unit // alpha 2.1
         {
             dice_pool.add(dice);
         }
+        turn_pool = (ArrayList<Integer>) dice_pool.clone();
 
         // adding item effect pool
         for(effect spell : thing.magic_pool)
@@ -92,9 +94,9 @@ abstract class unit // alpha 2.1
         int counter = 0;
 
         // place where strategy is generated
-        for (int i = 0; i < dice_pool.size(); i++)
+        for (int i = 0; i < turn_pool.size(); i++)
         {
-            strategy.get(counter).add(dice_pool.get(i));
+            strategy.get(counter).add(turn_pool.get(i));
             counter += 1;
             if (counter == attack_speed)
             {
