@@ -1,75 +1,39 @@
-public class monster
+public class monster extends unit // alpha 2.2
 {
-    // Stats
-    int STR;
-    int AG;
-    int INT;
+    int level;
 
-    int HP;
-    int max_HP;
-
-    int[] weapon = {0, 0};
-    int[] armor = {0, 0};
-
-    monster()
+    monster(int power)
     {
-        create_monster();
-        // monster: Function with the same name lunches after creating an object
+        create_moster(power);
     }
 
-
-    public void create_monster()
+    public void create_moster(int power)
     {
-        int[] golem = {6, 1, 5};// Golem role
-        int[] bandit = {5, 4, 5};// Bandit role
-        int[] warlock = {3, 6, 3};// Warlock role
-        int[][] roles = {golem, bandit, warlock};// Shortcut
+        int[] knight = {3, 2, 1};
+        int[] rouge = {2, 3, 1};
+        int[] mage = {1, 2, 3};
+        int[][] roles = {knight, rouge, mage};
         int[] role = roles[(int)(Math.random() * roles.length)];
-        //// We randomly choose from three possible roles which we defined earlier
 
-        STR = role[0];// Strength values
-        AG = role[1];// Agility values
-        INT = role[2];// Intelligence values
+        if (power < 1)
+        {
+            power = 1;
+            output.debug("minus level for monster");
+        }
+        level = power;
 
-        max_HP = STR*INT;// Generate max Health Points
+        STR = role[0];
+        AG = role[1];
+        INT = role[2];
+
+
+
+
+        artefact = new item(power);
+        item_change(artefact);
+        generate_strategy();
+
+        max_HP = STR*balance.medium;
         HP = max_HP;
-
-
-        weapon[0] = AG;
-        weapon[1] = INT;
-
-        armor[0] = STR;
-        armor[1] = AG;
-    }
-
-
-    public void damage(int value)
-    {
-        // hp change
-        HP -= value;
-    }
-
-
-    // Generating attack and it's value
-    public int attack()
-    {
-        int value = 0;
-        for (int i = 0; i < weapon[0]; i++)
-        {
-            value += (int) (Math.random() * weapon[1]);
-        }
-        return value;
-
-    }
-
-    // Generating defense value
-    public int defense()
-    {
-        int value = 0;
-        for (int i = 0; i < armor[0]; i++)
-        {
-            value += (int) (Math.random() * armor[1]);
-        }
-        return value;
     }
 }

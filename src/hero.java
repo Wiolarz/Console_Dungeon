@@ -1,79 +1,153 @@
-public class hero
+import java.util.ArrayList;
+
+public class hero extends unit // alpha 2.2
 {
-    // Stats
-    int STR;
-    int AG;
-    int INT;
-
-    int HP = 1;
-    int max_HP = 1;
-
-    int[] weapon = {0, 0};
-    int[] armor = {0, 0};
-
+    int level = 1;
+    int exp = 0;
     int gold = 0;
+
+    static hero generate()
+    {
+        hero dude = new hero();
+        return dude;
+    }
 
     hero()
     {
         create_hero();
-    } // Hero: Function with the same name lunches after creating an object
+    }
 
-    public void create_hero()
-    { // We create hero classes
-        int[] knight = {10, 4, 3};// Hero role Knight
-        int[] rouge = {7, 6, 6};// Hero role Rouge
-        int[] mage = {3, 3, 8};// Hero role Mage
-        int[][] roles = {knight, rouge, mage};// Shortcut
-        int[] role = roles[(int)(Math.random() * roles.length)];// We use this shortcut here
-        // We randomly choose from three possible roles which we defined earlier
 
-        STR = role[0];// Strength values
-        AG = role[1];// Agility values
-        INT = role[2];//Intelligence values
+    private void create_hero()
+    {
+        int[] knight = {3, 2, 1};
+        int[] rouge = {2, 3, 1};
+        int[] mage = {1, 2, 3};
+        int[][] roles = {knight, rouge, mage};
+        int[] role = roles[(int)(Math.random() * roles.length)];
 
-        weapon[0] = AG;
-        weapon[1] = INT;
+        STR = role[0];
+        AG = role[1];
+        INT = role[2];
 
-        armor[0] = STR;
-        armor[1] = AG;
 
-        max_HP = STR*INT;// Generate max Health Points
+
+        artefact = new item(1);
+        artefact.set_stats(STR, AG, INT);
+
+
+
+
+        item_change(artefact);
+        generate_strategy();
+
+        max_HP = level * balance.strong;
         HP = max_HP;
+
+
+        // to be removed
+        gold = 10;
+    }
+
+
+    public boolean pay(int price)
+    {
+        // used in shop, if player has enough money to pay the price it returns true
+        if (price <= gold){
+            gold -= price;
+            return true;
+        } else
+            System.out.println("not enough money " + (price-gold) + " needed");
+            return false;
+    }
+
+
+    public void experience(int value)
+    {
+        exp += value * balance.weak;
+        while (exp > (level * balance.levelup_speed)) {
+            if ((STR+AG+INT) == balance.dices.length*3){
+                return; // max level
+            }
+            exp -= (level * balance.levelup_speed);
+            level += 1;
+
+
+            ArrayList<Integer> levelups = new ArrayList<>();
+            if (STR < balance.dices.length) levelups.add(0);
+            if (AG < balance.dices.length) levelups.add(1);
+            if (INT < balance.dices.length) levelups.add(2);
+            if (levelups.size() > 0){
+                switch (levelups.get((int)((Math.random()*levelups.size())))) {
+                    case 0-> STR++;
+                    case 1-> AG++;
+                    case 2-> INT++;
+                }
+            }
+
+            stat_changed();
+        }
+    }
+
+
+    private void stat_changed()
+    {
+        // adjusting HP
+        int hp_correct = (level * balance.strong)-max_HP;
+        max_HP = level * balance.strong;
+        HP += hp_correct;
+
+        //item_change(artefact); // currently not used
+    }
+
+    public void cheats()
+    {
+        STR = 6;
+        AG = 6;
+        INT = 6;
+        stat_changed();
+        HP = max_HP;
+        gold += 1000;
+    }
+
+
+
+
+    @Override
+    public void printing_all_stats()
+    {
+        // we add hero specific values
+        System.out.println("STR: " + STR + " AG: " + AG + " INT: " + INT);
+        System.out.println("HP: " + HP + " MAX_HP: " + max_HP);
+        System.out.println("Item base: " + dice_pool);
+        System.out.println("Strategy: " + strategy);
+        System.out.print("MAGIC: ");
+        for (ArrayList<effect> spell_list : magic)
+        {
+            for (effect spell : spell_list)
+            {
+                output.print(spell.short_print());
+            }
+        }
+        System.out.println();
+        System.out.println("Gold: " + gold + " Level: " + level + " Exp: " + exp);
+    }
+
+    public void heal(int value)
+    {
+        HP += value;
+        if (HP > max_HP){
+            HP = max_HP;
+        }
     }
 
     public void damage(int value)
     {
-        // hp change
+        // Health points reduction
         HP -= value;
-        if(HP <= 0)
-        {
+        if (HP <= 0){
             System.out.println("YOU DIED");
-            System.out.println("Your gold: " + gold);
-            // It is printed out when your health points go down to HP<=0
-            System.exit(2); // App closes
+            System.exit(666);
         }
-    }
-
-    // Generating attack and it's value
-    public int attack()
-    {
-        int value = 0;
-        for (int i = 0; i < weapon[0]; i++)
-        {
-            value += (int) (Math.random() * weapon[1]);
-        }
-        return value;
-
-    }
-
-    // Generating defense value
-    public int defense()
-    {
-        int value = 0;
-        for (int i = 0; i < armor[0]; i++)
-        {
-            value += (int) (Math.random() * armor[1]);
-        }
-        return value;
     }
 }
