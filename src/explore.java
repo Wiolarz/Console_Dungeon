@@ -41,9 +41,11 @@ public class explore // alpha 2.2
     }
 
 
-    static monster generate_enemy(int level)
+    static ArrayList<monster> generate_enemy(int level)
     {// event during exploring which challenges player
-        return new monster(level);
+        ArrayList<monster> enemy = new ArrayList<>();
+        enemy.add(new monster(level));
+        return enemy;
     }
 
 
@@ -65,13 +67,13 @@ public class explore // alpha 2.2
     }
 
 
-    static boolean fight(ArrayList<hero> company, monster enemy)
+    static boolean fight(ArrayList<hero> company, ArrayList<monster> enemy)
     {
-        enemy.printing_all_stats();
+        enemy.get(0).printing_all_stats();
 
         // fighting
 
-        while (enemy.HP > 0)
+        while (enemy.get(0).HP > 0)
         {
             int choice = input.choice();
 
@@ -89,28 +91,28 @@ public class explore // alpha 2.2
                     int success = attack(company.get(0).strategy.get(0));
                     for (int i = 0; i < success; i++)
                     {
-                        enemy.HP -= 1;
+                        enemy.get(0).HP -= 1;
                     }
 
                     break;
                 }
             }
             
-            if (enemy.HP <= 0)
+            if (enemy.get(0).HP <= 0)
             {
                 break;
             }
 
-            company.get(0).damage(attack(enemy.strategy.get(0)));
+            company.get(0).damage(attack(enemy.get(0).strategy.get(0)));
         }
-        company.get(0).experience(enemy.level);
+        company.get(0).experience(enemy.get(0).level);
         return true;
     }
 
 
     static boolean walking(ArrayList<hero> company, ArrayList<location> world, int day)
     {
-        int choice = 0;
+        int choice;
 
         while (true)
         {
