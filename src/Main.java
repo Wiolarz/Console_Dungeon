@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main // alpha 2.2 multiple enemy combat - Wiolarz
+public class Main // alpha 2.3 quest - Wiolarz
 {
 /*
 Console Dungeon alpha version 2.4 New quest system QS_v1.0 - Wiolarz
@@ -12,10 +12,10 @@ quest.java
 
 
 Quest types ideas:
-    1 Support local medic - Heal yourself or your mercenary for X amount
+    //1 Support local medic - Heal yourself or your mercenary for X amount
     2 Pay taxes - Get x gold, then interact with
     3 Kill monsters in X - kill Y amount of levels of monsters in that location
-    4
+    4 Kill boss
 */
     public static int days;
     public static quest main_quest;
@@ -30,8 +30,6 @@ Quest types ideas:
 
         main_quest = new quest(days);
 
-
-        //System.out.println("At day 10 if you haven`t killed a warlock in dungeon, the world will be doomed");
 
         ArrayList<item> item_list = economy.generate_items(days);
         ArrayList<location> world = explore.generate_world();
@@ -53,7 +51,7 @@ Quest types ideas:
                 default ->
                         {
                             main_quest.days_to_complete--;
-                            main_quest.check_quest(company.get(0));
+                            main_quest.check_quest(company.get(0)); //
                             days++;
                             company.add(hero.create_mercenary(days));
                             item_list = economy.generate_items(days);
