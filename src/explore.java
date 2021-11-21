@@ -23,7 +23,7 @@ public class explore // alpha 2.2
                 }
             }
         }
-        if (Main.main_quest.type.equals("boss"))
+        if (Main.main_quest.type.equals("boss") && Main.main_quest.target_place == place.id)
         {
             output.println("You encounter boss, his level: " + place.quest_level);
             ArrayList<monster> boss = new ArrayList<>();
@@ -36,7 +36,7 @@ public class explore // alpha 2.2
                 Main.main_quest.days_to_complete++;
             }
         }
-        else if (Main.main_quest.type.equals("monsters"))
+        else if (Main.main_quest.type.equals("monsters") && Main.main_quest.target_place == place.id)
         {
             output.println("you have defeated " + killed + " monsters");
             Main.main_quest.monsters_to_kill -= killed;
