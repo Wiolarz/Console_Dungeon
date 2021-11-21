@@ -8,15 +8,15 @@ public class explore // alpha 2.2
         {
             int event = (int)(Math.random() * 10);
 
-            if ((event <= place.quest_enemy) && (balance.main_quest.target_place == place.id))
+            if ((event <= place.quest_enemy) && (Main.main_quest.target_place == place.id))
             {
                 output.println("event related enemy");
                 if(fight(company, generate_enemy(place.quest_level)))
                 {
                     output.println("You won");
                     output.println("New quest: ");
-                    balance.main_quest = new quest(day);
-                    balance.main_quest.print_info();
+                    Main.main_quest = new quest(day);
+                    Main.main_quest.print_info();
                 }
             }
             else if(event <= place.chest_chance)

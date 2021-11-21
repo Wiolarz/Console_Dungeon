@@ -33,7 +33,7 @@ public class balance // alpha 2.1
     public static int week = 7;
 
 
-    public static quest main_quest;
+
 
 
     public static int location_number = 7; // max 8
