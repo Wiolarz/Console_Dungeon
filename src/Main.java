@@ -1,51 +1,35 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main // alpha 2.2 multiple enemy combat - Wiolarz
+public class Main // alpha 2.3 quest - Wiolarz
 {
 /*
-Console Dungeon alpha version 2.2 multiple enemy combat - Wiolarz
+Console Dungeon alpha version 2.4 New quest system QS_v1.0 - Wiolarz
 
-Instead of fighting 3 rounds with a single enemy, gameplay will mostly consist of managing multiple characters combat:
-Player will be in a squad, and most often he will fight against groups of enemy's
-
-
-Basic premise:
-instead of splitting dices into turns of combat, dices are split into attacks which are assigned to different targets,
-
-Assigning more dices to a single attack makes it succeed more often despite enemy protection, but at the same time
-he needs to be able to manage to fend off multiple foes
-
-Advanced ideas:
-Those attack slots would not actually be attack slots but action slots, which could have been something that has an
-assigned effect--->like attack, block, shield, power attack. Those could maybe affect multiple foes or just player,
-and also have a requirement to succeed and also have multiple success levels EXAMPLE:
-Shield - min 4 each next *1,5 (6, 9, 13, 19) each success grants 1 hit damage less for the next turn
+Changes in files:
+Most likely main quest references (Main.java explore.java)
+quest.java
 
 
-
-
-PROBLEMS:
-someone who attacks first, most of the time applies effects making enemy less likely to apply their effects back
-making each fight have a big advantage for the attacker
-
-
+Quest types ideas:
+    //1 Support local medic - Heal yourself or your mercenary for X amount
+    2 Pay taxes - Get x gold, then interact with
+    3 Kill monsters in X - kill Y amount of levels of monsters in that location
+    4 Kill boss
 */
-
-
+    public static int days;
+    public static quest main_quest;
 
     static void overworld(ArrayList<hero> company)
     {
         int choice = 0;
 
         // days system
-        int days = 1;
+        days = 1;
         company.add(hero.create_mercenary(days));
 
-        balance.main_quest = new quest(days);
+        main_quest = new quest(days);
 
-
-        //System.out.println("At day 10 if you haven`t killed a warlock in dungeon, the world will be doomed");
 
         ArrayList<item> item_list = economy.generate_items(days);
         ArrayList<location> world = explore.generate_world();
@@ -54,9 +38,9 @@ making each fight have a big advantage for the attacker
         while (choice != 9)
         {
 
-            if (balance.main_quest.days_to_complete <= 0)
+            if (main_quest.days_to_complete <= 0)
             { // Time has run out DEFEAT
-                output.println(balance.main_quest.fail_story);
+                output.println(main_quest.fail_story);
                 System.exit(3);
             }
 
@@ -66,7 +50,8 @@ making each fight have a big advantage for the attacker
                 case 1, 2 -> {}// if choice was not to explore the days are not passing
                 default ->
                         {
-                            balance.main_quest.days_to_complete--;
+                            main_quest.days_to_complete--;
+                            main_quest.check_quest(company.get(0)); //
                             days++;
                             company.add(hero.create_mercenary(days));
                             item_list = economy.generate_items(days);
@@ -74,7 +59,7 @@ making each fight have a big advantage for the attacker
             }
 
 
-            balance.main_quest.print_info();
+            main_quest.print_info();
             output.println("Day " + days + "  1 info;   2 shop;  3 world;  9 Exit game");
 
             choice = input.choice();

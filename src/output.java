@@ -7,6 +7,10 @@ public class output
         System.out.println(txt);
     }
 
+    static void error(String txt)
+    {
+        System.out.println(txt);
+    }
 
     static String roman_numbers(int value)
     {     // Conversion of int into a roman number (works correctly to a max number of 39)

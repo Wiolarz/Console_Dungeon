@@ -4,30 +4,51 @@ public class explore // alpha 2.2
 {
     private static void walk(ArrayList<hero> company, location place, int day)
     { // takes
+        int killed = 0;
         for (int i = 0; i < balance.events; i++)
         {
             int event = (int)(Math.random() * 10);
 
-            if ((event <= place.quest_enemy) && (balance.main_quest.target_place == place.id))
-            {
-                output.println("event related enemy");
-                if(fight(company, generate_enemy(place.quest_level)))
-                {
-                    output.println("You won");
-                    output.println("New quest: ");
-                    balance.main_quest = new quest(day);
-                    balance.main_quest.print_info();
-                }
-            }
-            else if(event <= place.chest_chance)
+
+
+            if(event <= place.chest_chance)
             {
                 output.println("You found a chest");
                 chest(company, place.chest_gold);
             } else {
                 output.println("You fight");
-                fight(company, generate_enemy(place.level));
+                if (fight(company, generate_enemy(place.level)))
+                {
+                    killed += place.level;
+                }
             }
         }
+        if (Main.main_quest.type.equals("boss") && Main.main_quest.target_place == place.id)
+        {
+            output.println("You encounter boss, his level: " + place.quest_level);
+            ArrayList<monster> boss = new ArrayList<>();
+            boss.add(new monster(place.quest_level));
+            if(fight(company, boss))
+            {
+                output.println("You won");
+                output.println("New quest: ");
+                Main.main_quest = new quest(day);
+                Main.main_quest.days_to_complete++;
+            }
+        }
+        else if (Main.main_quest.type.equals("monsters") && Main.main_quest.target_place == place.id)
+        {
+            output.println("you have defeated " + killed + " monsters");
+            Main.main_quest.monsters_to_kill -= killed;
+            if(Main.main_quest.monsters_to_kill <= 0)
+            {
+                output.println("You won");
+                output.println("New quest: ");
+                Main.main_quest = new quest(day);
+                Main.main_quest.days_to_complete++;
+            }
+        }
+
     }
 
 
