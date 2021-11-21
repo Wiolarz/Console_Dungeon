@@ -24,17 +24,6 @@ Shield - min 4 each next *1,5 (6, 9, 13, 19) each success grants 1 hit damage le
 
 
 
-TODO:
-number of enemy monsters based on presets but related to their level
-
-create static function in hero class to generate mercenary
-remove "game-over" from death in hero class, introduce it -> in removing last member from company array
-
-Change checks in to enemy array being empty
-
-add removing enemy from an array if his hp 0
-
-
 
 PROBLEMS:
 someone who attacks first, most of the time applies effects making enemy less likely to apply their effects back
@@ -51,9 +40,10 @@ making each fight have a big advantage for the attacker
 
         // days system
         int days = 1;
+        company.add(hero.create_mercenary(days));
+
         balance.main_quest = new quest(days);
 
-        balance.main_quest.print_info();
 
         //System.out.println("At day 10 if you haven`t killed a warlock in dungeon, the world will be doomed");
 
@@ -78,14 +68,14 @@ making each fight have a big advantage for the attacker
                         {
                             balance.main_quest.days_to_complete--;
                             days++;
+                            company.add(hero.create_mercenary(days));
                             item_list = economy.generate_items(days);
                         }
             }
 
 
-
-            output.println("Day " + days + " days to finish quest: " + balance.main_quest.days_to_complete +
-                    "   1 info;   2 shop;  3 world;  9 Exit game");
+            balance.main_quest.print_info();
+            output.println("Day " + days + "  1 info;   2 shop;  3 world;  9 Exit game");
 
             choice = input.choice();
 

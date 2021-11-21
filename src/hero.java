@@ -49,6 +49,38 @@ public class hero extends unit // alpha 2.2
         gold = 10;
     }
 
+    static hero create_mercenary(int power)
+    {
+        hero mercenary = new hero();
+        int[] knight = {3, 2, 1};
+        int[] rouge = {2, 3, 1};
+        int[] mage = {1, 2, 3};
+        int[][] roles = {knight, rouge, mage};
+        int[] role = roles[(int)(Math.random() * roles.length)];
+
+        if (power < 1)
+        {
+            power = 1;
+            output.debug("minus level for mercenary");
+        }
+        mercenary.level = power;
+
+        mercenary.STR = role[0];
+        mercenary.AG = role[1];
+        mercenary.INT = role[2];
+
+
+
+
+        mercenary.artefact = new item(power);
+        mercenary.item_change(mercenary.artefact);
+        mercenary.generate_strategy();
+
+        mercenary.max_HP = power;
+        mercenary.HP = mercenary.max_HP;
+        return mercenary;
+    }
+
 
     public boolean pay(int price)
     {
