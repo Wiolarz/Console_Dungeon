@@ -126,7 +126,7 @@ public class economy // alpha 2.1
         while (choice != 9) {
 
             // Info for player
-            System.out.print("Welcome to shop 1 exit; 2 heal(3) 1g;");
+            System.out.print("Welcome to shop 1 exit; 2 medic's shop;");
 
             for (int i = 0; i < folders.size(); i++)
             {
@@ -140,7 +140,7 @@ public class economy // alpha 2.1
 
             if (choice == 1){
                 choice = 9; // exit
-            } else if (choice == 2 && player.pay(1)){
+            } else if (choice == 2){
                 medic(player); //
             } else
             {
@@ -149,32 +149,42 @@ public class economy // alpha 2.1
         }
     }
 
-    static boolean medic(hero player) {
-        Scanner in = new Scanner(System.in);
-        int choice = in.nextInt();  // User input
-
+    static void medic(hero player) {
         int[][] healing  = {{1, 3}, {2, 5}, {3, 6}, {5, 8}};
 
-        if (choice == 1) return false; // exit medic shop
+        output.print("Welcome to medic's shop 1 exit; 2 auto-heal ");
+        int x = 3;
+        for(int[] item : healing)
+            output.print(x++ + " [heal: " + item[0] + " price: " + item[1] + "] ");
+
+        output.println("");
+
+        int choice = input.choice();  // User input
+
+        if (choice == 1) return; // exit medic shop
         else if(choice == 2) {  // auto-heal to max possible HP
             autoHeal(player, healing);
-            return true;
+            return;
         }
         else if (choice > 2 && choice < 1 + healing.length) //enter healing manually
         {
             if(player.pay(healing[choice - 3][1])) {
                 heal(player, healing[choice - 3][0]);
-                return true;
+                return;
             } else {
-                System.out.println("Not enough money");
+                output.println("Not enough money");
+                return;
             }
         }
-        return false;
+        else {
+            output.println("Wrong choice");
+            return;
+        }
     }
 
     static void heal(hero player, int heal) {
         if(player.HP + heal <= player.max_HP) player.HP += heal;
-        else System.out.println("not enough gold");
+        else player.HP = player.max_HP;
     }
 
     static void autoHeal(hero player, int[][] healing)
