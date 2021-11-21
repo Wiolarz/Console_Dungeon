@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class explore // alpha 2.2
 {
-    static void walk(ArrayList<hero> company, location place, int day)
+    private static void walk(ArrayList<hero> company, location place, int day)
     { // takes
         for (int i = 0; i < balance.events; i++)
         {
@@ -31,24 +31,76 @@ public class explore // alpha 2.2
     }
 
 
+// walking functions
 
-
-    static void chest(ArrayList<hero> company, int quality)
+    private static void chest(ArrayList<hero> company, int quality)
     { // event during exploring which rewards player
         company.get(0).gold += quality;
     }
 
 
-    static ArrayList<monster> generate_enemy(int level)
+    private static ArrayList<monster> generate_enemy(int level)
     {// event during exploring which challenges player
         ArrayList<monster> enemy = new ArrayList<>();
-        enemy.add(new monster(level));
+
+        if (level == 1)
+        {
+            enemy.add(new monster(1));
+            return enemy;
+        }
+        else if (level == 2)
+        {
+            if ((int)(Math.random() * 2) == 1) //50% chance
+            {
+                enemy.add(new monster(2));
+            }
+            else
+            {
+                enemy.add(new monster(1));
+                enemy.add(new monster(1));
+            }
+            return enemy;
+        }
+
+        switch ((int)(Math.random() * 3)) // * number of cases
+        {
+            case 0 ->
+            { // horde
+                for (int i = 0; i < level; i++)
+                {
+                    enemy.add(new monster(1));
+                }
+            }
+            case 1 ->
+            { // random
+                int split = (int)(Math.random() * level-2) + 2; // 2 -> level-1
+
+                int resource = level; //
+
+                for (int i = 1; i < split; i++)
+                {
+                    int next_level = ((resource) / (split )) + 1 ;
+                    enemy.add(new monster(next_level));
+                    resource -= next_level;
+                }
+                enemy.add(new monster(resource));
+            }
+            case 2 ->
+            { // single boss
+                enemy.add(new monster(level));
+            }
+
+            default -> {output.debug("explore.generate_enemy switch case error");}
+        }
+
         return enemy;
     }
 
 
 
-    static int attack(ArrayList<Integer> dice_pool)
+// fight functions
+
+    private static int attack(ArrayList<Integer> dice_pool)
     {
         int score = unit.attack(dice_pool);
 
@@ -63,8 +115,6 @@ public class explore // alpha 2.2
         }
         return success;
     }
-
-// fight functions
 
     private static boolean graveyard_hero(ArrayList<hero> fighters)
     {
@@ -105,7 +155,7 @@ public class explore // alpha 2.2
         for (hero fighter : company)
         {
             for (int action = 0; action < fighter.attack_speed; action++)
-            {
+            { // here could be a choice to perform different action instead
                 int target = (int) (Math.random() * enemy.size());
 
                 int success = attack(fighter.strategy.get(action));
@@ -140,7 +190,7 @@ public class explore // alpha 2.2
         for (monster fighter : enemy)  // monster attacks
         {
             for (int action = 0; action < fighter.attack_speed; action++)
-            {
+            { // here could be a choice to perform different action instead
                 int target = (int)(Math.random() * company.size());
 
                 int success = attack(fighter.strategy.get(action));
