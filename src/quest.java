@@ -95,7 +95,7 @@ public class quest
             switch (type)
             {
                 case "boss" -> {}
-                case "gold" -> {if(pay_money(player)) Main.main_quest = new quest(Main.days);}
+                case "gold" -> {if (player.pay(quest_gold)) Main.main_quest = new quest(Main.days);}
             }
         }
         catch (Exception e)
@@ -103,16 +103,6 @@ public class quest
             output.error("quest check_quest() -> wrong type");
         }
 
-    }
-
-    private boolean pay_money(hero player)
-    {
-        if (player.gold >= quest_gold)
-        {
-            player.gold -= quest_gold;
-            return true;
-        }
-        return false;
     }
 
 

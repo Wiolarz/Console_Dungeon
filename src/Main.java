@@ -53,6 +53,7 @@ Quest types ideas:
                 default ->
                         {
                             main_quest.days_to_complete--;
+                            main_quest.check_quest(company.get(0));
                             days++;
                             company.add(hero.create_mercenary(days));
                             item_list = economy.generate_items(days);
