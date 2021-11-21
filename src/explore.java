@@ -1,12 +1,9 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class explore // alpha 2.2
 {
-    static void walk(hero player, location place, int day)
+    private static void walk(ArrayList<hero> company, location place, int day)
     { // takes
-
         for (int i = 0; i < balance.events; i++)
         {
             int event = (int)(Math.random() * 10);
@@ -14,7 +11,7 @@ public class explore // alpha 2.2
             if ((event <= place.quest_enemy) && (balance.main_quest.target_place == place.id))
             {
                 output.println("event related enemy");
-                if(fight(player, generate_enemy(place.quest_level)))
+                if(fight(company, generate_enemy(place.quest_level)))
                 {
                     output.println("You won");
                     output.println("New quest: ");
@@ -25,88 +22,252 @@ public class explore // alpha 2.2
             else if(event <= place.chest_chance)
             {
                 output.println("You found a chest");
-                chest(player, place.chest_gold);
+                chest(company, place.chest_gold);
             } else {
                 output.println("You fight");
-                fight(player, generate_enemy(place.level));
+                fight(company, generate_enemy(place.level));
             }
         }
     }
 
 
+// walking functions
 
-
-    static void chest(hero player, int quality)
+    private static void chest(ArrayList<hero> company, int quality)
     { // event during exploring which rewards player
-        player.gold += quality;
+        company.get(0).gold += quality;
     }
 
 
-    static monster generate_enemy(int level)
+    private static ArrayList<monster> generate_enemy(int level)
     {// event during exploring which challenges player
-        return new monster(level);
-    }
+        ArrayList<monster> enemy = new ArrayList<>();
 
-
-
-    static boolean round(hero player, monster enemy, int turn)
-    {
-        ArrayList<Integer> p = player.strategy.get(turn);
-        ArrayList<Integer> e = enemy.strategy.get(turn);
-
-        p = enemy.effect(p, turn); // problem, there is no, round aligned effects possible
-        e = player.effect(e, turn);
-
-
-        int p_score = unit.attack(p);
-        int e_score = unit.attack(e);
-
-        if(turn != 2){
-            return p_score >= e_score;
-        } else {
-            return p_score > e_score;
-        }
-    }
-
-
-    static boolean fight(hero player, monster enemy)
-    {// number of won rounds, if player wins 2 rounds he wins
-        int p = 0;
-
-        enemy.printing_all_stats();
-
-        // fighting
-        // each side rolls their dices and we check who had higher score
-        int[] score = {0, 0};
-        for (int turn = 0; true; turn++)
+        if (level == 1)
         {
-            if (round(player, enemy, turn))
+            enemy.add(new monster(1));
+            return enemy;
+        }
+        else if (level == 2)
+        {
+            if ((int)(Math.random() * 2) == 1) //50% chance
             {
-                score[0]++;
+                enemy.add(new monster(2));
             }
             else
             {
-                score[1]++;
+                enemy.add(new monster(1));
+                enemy.add(new monster(1));
             }
-            if (score[0] == 2)
-            { // when player reaches 2 wins,
-                output.println("Final score: " + Arrays.toString(score));
-                player.experience(enemy.level);
-                return true;
-            } else if (score[1] == 2)
-            {
-                output.println("Final score: " + Arrays.toString(score));
-                player.damage(enemy.level);
-                return false;
-            }
+            return enemy;
         }
 
+        switch ((int)(Math.random() * 3)) // * number of cases
+        {
+            case 0 ->
+            { // horde
+                for (int i = 0; i < level; i++)
+                {
+                    enemy.add(new monster(1));
+                }
+            }
+            case 1 ->
+            { // random
+                int split = (int)(Math.random() * level-2) + 2; // 2 -> level-1
+
+                int resource = level; //
+
+                for (int i = 1; i < split; i++)
+                {
+                    int next_level = ((resource) / (split )) + 1 ;
+                    enemy.add(new monster(next_level));
+                    resource -= next_level;
+                }
+                enemy.add(new monster(resource));
+            }
+            case 2 ->
+            { // single boss
+                enemy.add(new monster(level));
+            }
+
+            default -> {output.debug("explore.generate_enemy switch case error");}
+        }
+
+        return enemy;
     }
 
 
-    static boolean walking(hero player, ArrayList<location> world, int day)
+
+// fight functions
+
+    private static int attack(ArrayList<Integer> dice_pool)
     {
-        int choice = 0;
+        int score = unit.attack(dice_pool);
+
+        // counting number of successes
+        int success = 0;
+        int difficulty = 6;
+        while (difficulty < score)
+        {
+            score -= difficulty;
+            difficulty = (int)(difficulty * 1.5);
+            success++;
+        }
+        return success;
+    }
+
+    private static boolean graveyard_hero(ArrayList<hero> fighters)
+    {
+        for (int fighter = fighters.size() - 1; fighter >= 0; fighter--)
+        {
+            if (fighters.get(fighter).HP <= 0)
+            {
+                fighters.remove(fighter);
+            }
+        }
+        return fighters.size() == 0;
+    }
+    private static boolean graveyard_monster(ArrayList<monster> fighters)
+    {
+        for (int fighter = fighters.size() - 1; fighter >= 0; fighter--)
+        {
+            if (fighters.get(fighter).HP <= 0)
+            {
+                fighters.remove(fighter);
+            }
+        }
+        return fighters.size() == 0;
+    }
+
+    private static void turn_attacks_hero(ArrayList<hero> company, ArrayList<monster> enemy)
+    {
+        // before player attack we remove effects from enemy
+        for (monster fighter : enemy)
+        {
+            fighter.turn_pool = fighter.dice_pool;
+        }
+        // before player attacks we apply effects from players attack to their attacks
+        for (hero fighter : company)
+        {
+            fighter.generate_strategy();
+        }
+
+        for (hero fighter : company)
+        {
+            for (int action = 0; action < fighter.attack_speed; action++)
+            { // here could be a choice to perform different action instead
+                int target = (int) (Math.random() * enemy.size());
+
+                int success = attack(fighter.strategy.get(action));
+
+                for (int i = 0; i < success; i++)
+                {
+                    enemy.get(target).HP -= 1;
+                }
+
+                if (success > 0)
+                {
+                    fighter.effect(enemy.get(target).turn_pool, action);
+                }
+            }
+        }
+    }
+
+    private static void turn_attacks_monster(ArrayList<monster> enemy, ArrayList<hero> company)
+    {
+        // before enemy attack we remove effects from players
+        for (hero fighter : company)
+        {
+            fighter.turn_pool = fighter.dice_pool;
+        }
+        // before enemy attack we aplly effects from players attack to their attacks
+        for (monster fighter : enemy)
+        {
+            fighter.generate_strategy();
+        }
+
+
+        for (monster fighter : enemy)  // monster attacks
+        {
+            for (int action = 0; action < fighter.attack_speed; action++)
+            { // here could be a choice to perform different action instead
+                int target = (int)(Math.random() * company.size());
+
+                int success = attack(fighter.strategy.get(action));
+
+                for (int i = 0; i < success; i++)
+                {
+                    company.get(target).HP -= 1;
+                }
+
+                if (success > 0)
+                {
+                    fighter.effect(company.get(target).turn_pool, action);
+                }
+            }
+        }
+    }
+
+
+    static boolean fight(ArrayList<hero> company, ArrayList<monster> enemy)
+    {
+        // measure the challenge level
+        int challenge = 0;
+        for (monster fighter : enemy)
+        {
+            challenge += fighter.level;
+        }
+
+        //enemy.get(0).printing_all_stats();
+
+        // fighting
+
+        for (int rounds = 1; rounds < 50; rounds++)
+        {
+            int choice = input.choice();
+
+            switch (choice)
+            {
+                case 1 -> // escape attempt
+                {
+                    // basic roll for each fighter, if player side succeeds
+                    //if success return false
+                    return false;
+                }
+
+                case 2 ->
+                {
+                    // player attacks
+                    // random targets for now
+                    turn_attacks_hero(company, enemy);
+
+                    // checking dead enemy
+                    if (graveyard_monster(enemy))
+                    {
+                        output.println("You have won this fight");
+                        company.get(0).experience(challenge);
+                        return true;
+                    }
+                }
+            }
+
+            turn_attacks_monster(enemy, company);
+
+            // checking dead in company
+            if (graveyard_hero(company))
+            {
+                output.println("Your company has been defeated GAME OVER");
+                System.exit(666);
+            }
+
+        }
+        return false; // a draw
+    }
+
+
+    static boolean walking(ArrayList<hero> company, ArrayList<location> world, int day)
+    {
+        int choice;
 
         while (true)
         {
@@ -124,7 +285,7 @@ public class explore // alpha 2.2
             if (choice == 1) return false; // exit world map
             else if (choice > 1) // enter location
             {
-                walk(player, world.get(choice - 2), day);
+                walk(company, world.get(choice - 2), day);
                 return true;
             }
         }

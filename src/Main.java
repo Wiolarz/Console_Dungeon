@@ -1,54 +1,49 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main // alpha 2.2
+public class Main // alpha 2.2 multiple enemy combat - Wiolarz
 {
 /*
-Console Dungeon alpha version 2.2
-Main branch
+Console Dungeon alpha version 2.2 multiple enemy combat - Wiolarz
 
-I Overworld
-Better name generator for quests, and locations.
-
-II Economy
-Healing interface:
-when you press 2 in shop, you have a UI for healing (1 exit, 2 - heal to full, 3 heal intelligently,
-4 buy heal manually -> enter amount of hp you wish to restore
-
-III Fighting
-Maybe: choices during a fight?
+Instead of fighting 3 rounds with a single enemy, gameplay will mostly consist of managing multiple characters combat:
+Player will be in a squad, and most often he will fight against groups of enemy's
 
 
+Basic premise:
+instead of splitting dices into turns of combat, dices are split into attacks which are assigned to different targets,
 
+Assigning more dices to a single attack makes it succeed more often despite enemy protection, but at the same time
+he needs to be able to manage to fend off multiple foes
 
-Current problems:
-
-How to measure balance?? Testing environment for balance changes
-
-Random item creation only 1 type of effect is currently being made // fixed
-
-Items in shop are most of the time not available for the player
+Advanced ideas:
+Those attack slots would not actually be attack slots but action slots, which could have been something that has an
+assigned effect--->like attack, block, shield, power attack. Those could maybe affect multiple foes or just player,
+and also have a requirement to succeed and also have multiple success levels EXAMPLE:
+Shield - min 4 each next *1,5 (6, 9, 13, 19) each success grants 1 hit damage less for the next turn
 
 
 
 
-Random ideas:
+PROBLEMS:
+someone who attacks first, most of the time applies effects making enemy less likely to apply their effects back
+making each fight have a big advantage for the attacker
 
-Folders inside of folders (items, locations)
 
 */
 
 
 
-    static void overworld(hero player)
+    static void overworld(ArrayList<hero> company)
     {
         int choice = 0;
 
         // days system
         int days = 1;
+        company.add(hero.create_mercenary(days));
+
         balance.main_quest = new quest(days);
 
-        balance.main_quest.print_info();
 
         //System.out.println("At day 10 if you haven`t killed a warlock in dungeon, the world will be doomed");
 
@@ -73,24 +68,24 @@ Folders inside of folders (items, locations)
                         {
                             balance.main_quest.days_to_complete--;
                             days++;
+                            company.add(hero.create_mercenary(days));
                             item_list = economy.generate_items(days);
                         }
             }
 
 
-
-            output.println("Day " + days + " days to finish quest: " + balance.main_quest.days_to_complete +
-                    "   1 info;   2 shop;  3 world;  9 Exit game");
+            balance.main_quest.print_info();
+            output.println("Day " + days + "  1 info;   2 shop;  3 world;  9 Exit game");
 
             choice = input.choice();
 
 
             // list of locations
             switch (choice){
-                case 1 -> player.printing_all_stats(); // info
-                case 2 -> economy.shop(player, item_list); // shop
+                case 1 -> company.get(0).printing_all_stats(); // info
+                case 2 -> economy.shop(company.get(0), item_list); // shop
                 case 3 -> {
-                    if(explore.walking(player, world, days))
+                    if(explore.walking(company, world, days))
                     {
 
                     }
@@ -100,7 +95,7 @@ Folders inside of folders (items, locations)
                         // TODO this system is bad, day system should be remade
                     };
                 }
-                case 8 -> player.cheats(); // :))
+                case 8 -> company.get(0).cheats(); // :))
             }
         }
     }
@@ -118,10 +113,12 @@ Folders inside of folders (items, locations)
         //System.out.println(tester.monster_generation());
 
         // player creation
-        hero dude = new hero();
+        hero player = new hero();
 
-
+        player.printing_all_stats();
+        ArrayList<hero> company = new ArrayList<>();
+        company.add(player);
         // start of the main gameplay loop
-        overworld(dude);
+        overworld(company);
     }
 }

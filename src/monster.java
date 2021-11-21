@@ -33,7 +33,7 @@ public class monster extends unit // alpha 2.2
         item_change(artefact);
         generate_strategy();
 
-        max_HP = STR*balance.medium;
+        max_HP = power;
         HP = max_HP;
     }
 }
