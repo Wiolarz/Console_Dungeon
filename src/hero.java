@@ -1,16 +1,6 @@
-public class hero
+public class hero extends unit
 {
     // Stats
-    int STR;
-    int AG;
-    int INT;
-
-    int HP = 1;
-    int max_HP = 1;
-
-    int[] weapon = {0, 0};
-    int[] armor = {0, 0};
-
     int gold = 0;
 
     hero()
@@ -41,6 +31,7 @@ public class hero
         HP = max_HP;
     }
 
+    @Override
     public void damage(int value)
     {
         // hp change
@@ -52,28 +43,5 @@ public class hero
             // It is printed out when your health points go down to HP<=0
             System.exit(2); // App closes
         }
-    }
-
-    // Generating attack and it's value
-    public int attack()
-    {
-        int value = 0;
-        for (int i = 0; i < weapon[0]; i++)
-        {
-            value += (int) (Math.random() * weapon[1]);
-        }
-        return value;
-
-    }
-
-    // Generating defense value
-    public int defense()
-    {
-        int value = 0;
-        for (int i = 0; i < armor[0]; i++)
-        {
-            value += (int) (Math.random() * armor[1]);
-        }
-        return value;
     }
 }

@@ -1,4 +1,4 @@
-public class Main
+public class Main // Demo v1 - Kielt
 {
     static void first_adventure()
     {
