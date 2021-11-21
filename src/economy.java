@@ -141,12 +141,51 @@ public class economy // alpha 2.1
             if (choice == 1){
                 choice = 9; // exit
             } else if (choice == 2 && player.pay(1)){
-                player.heal(3); //
-
+                medic(player); //
             } else
             {
                 open_folder(player, folders.get(choice-3));
             }
         }
+    }
+
+    static boolean medic(hero player) {
+        Scanner in = new Scanner(System.in);
+        int choice = in.nextInt();  // User input
+
+        int[][] healing  = {{1, 3}, {2, 5}, {3, 6}, {5, 8}};
+
+        if (choice == 1) return false; // exit medic shop
+        else if(choice == 2) {  // auto-heal to max possible HP
+            autoHeal(player, healing);
+            return true;
+        }
+        else if (choice > 2 && choice < 1 + healing.length) //enter healing manually
+        {
+            if(player.pay(healing[choice - 3][1])) {
+                heal(player, healing[choice - 3][0]);
+                return true;
+            } else {
+                System.out.println("Not enough money");
+            }
+        }
+        return false;
+    }
+
+    static void heal(hero player, int heal) {
+        if(player.HP + heal <= player.max_HP) player.HP += heal;
+        else System.out.println("not enough gold");
+    }
+
+    static void autoHeal(hero player, int[][] healing)
+    {
+        while(player.gold >= healing[0][1] && player.HP < player.max_HP) {
+            for (int item = healing.length - 1; item >= 0; item--) {
+                while(player.HP + healing[item][0] <= player.max_HP && player.pay(healing[item][1])) {
+                    player.HP += healing[item][0];
+                }
+            }
+        }
+        output.println("gold: " + player.gold + " HP: " + player.HP);
     }
 }
