@@ -110,6 +110,35 @@ public class tester // 2.2
     }
 
 
+    static boolean heal()
+    {
+        try
+        {
+            int[][] healing  = {{2, 3}, {3, 5}, {4, 6}, {6, 8}};
+            hero player = new hero();
+            for (int max = 1; max < 100; max++)
+            {
+                player.max_HP = max;
+                for (int money = 0; money < 100; money++)
+                {
+                    player.gold = money;
+                    for (int health = 1; health <= max; health++)
+                    {
+                        player.HP = health;
+                        economy.autoHeal(player, healing);
+                    }
+                }
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+
 
 
 }

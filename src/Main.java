@@ -17,6 +17,7 @@ Quest types ideas:
     3 Kill monsters in X - kill Y amount of levels of monsters in that location
     4 Kill boss
 */
+
     public static int days;
     public static quest main_quest;
 
