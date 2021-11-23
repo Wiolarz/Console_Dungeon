@@ -1,21 +1,12 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main // alpha 2.3 quest - Wiolarz
+public class Main // alpha 2.5 Game_manager Wiolarz
 {
 /*
-Console Dungeon alpha version 2.4 New quest system QS_v1.0 - Wiolarz
+Every file except for balance
+removal of output and input --> all of those functions will go to a new class "manager.java"
 
-Changes in files:
-Most likely main quest references (Main.java explore.java)
-quest.java
-
-
-Quest types ideas:
-    //1 Support local medic - Heal yourself or your mercenary for X amount
-    2 Pay taxes - Get x gold, then interact with
-    3 Kill monsters in X - kill Y amount of levels of monsters in that location
-    4 Kill boss
 */
 
     public static int days;
@@ -41,8 +32,7 @@ Quest types ideas:
 
             if (main_quest.days_to_complete <= 0)
             { // Time has run out DEFEAT
-                output.println(main_quest.fail_story);
-                System.exit(3);
+                manager.exit(main_quest.fail_story, "quest_fail");
             }
 
             switch (choice)
@@ -60,11 +50,11 @@ Quest types ideas:
                         }
             }
 
-
+            //company.get(0).printing_all_stats();
             main_quest.print_info();
-            output.println("Day " + days + "  1 info;   2 shop;  3 world;  9 Exit game");
-
-            choice = input.choice();
+            // GAMEPLAY
+            choice = manager.choice("Day " + days + "  1 info;   2 shop;  3 world;  9 Exit game");
+            // END
 
 
             // list of locations
@@ -91,7 +81,7 @@ Quest types ideas:
                     }
                     catch (Exception e)
                     {
-                        output.debug("unit cannot have 0 attack_speed");
+                        manager.debug("unit cannot have 0 attack_speed");
                         company.get(0).attack_speed = 1;
                     }
                 }
@@ -113,7 +103,7 @@ Quest types ideas:
 
     public static void main(String[] args)
     {
-        output.println("Start");
+        manager.debug("Start");
 
         //System.out.println(tester.location_creation());
         //System.out.println(tester.quest_creator());
@@ -124,9 +114,9 @@ Quest types ideas:
         // player creation
         hero player = new hero();
 
-        player.printing_all_stats();
         ArrayList<hero> company = new ArrayList<>();
         company.add(player);
+
         // start of the main gameplay loop
         overworld(company);
     }

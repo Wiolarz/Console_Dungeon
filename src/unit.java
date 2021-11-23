@@ -106,6 +106,9 @@ abstract class unit // alpha 2.1
                 counter = 0;
             }
         }
+
+        counter = 0;
+
         for (int i = 0; i < effects_pool.size(); i++)
         {
             magic.get(counter).add(effects_pool.get(i));
@@ -149,18 +152,18 @@ abstract class unit // alpha 2.1
 
     public void printing_all_stats()
     { // we print every unit value
-        System.out.println("STR: " + STR + " AG: " + AG + " INT: " + INT);
-        System.out.println("HP: " + HP + " MAX_HP: " + max_HP);
-        System.out.println("Item base: " + dice_pool);
-        System.out.println("Strategy: " + strategy);
-        System.out.print("Magic: ");
+        manager.println("STR: " + STR + " AG: " + AG + " INT: " + INT);
+        manager.println("HP: " + HP + " MAX_HP: " + max_HP);
+        manager.println("Item base: " + dice_pool);
+        manager.println("Strategy: " + strategy);
+        manager.print("Magic: ");
         for (ArrayList<effect> spell_list : magic)
         {
             for (effect spell : spell_list)
             {
-                output.print(spell.short_print());
+                manager.print(spell.short_print());
             }
         }
-        System.out.println();
+        manager.println("");
     }
 }

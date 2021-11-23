@@ -54,30 +54,12 @@ public class economy // alpha 2.1
     {// interface to buy items from a smaller folder of items
 
         //printing possible choices
-        output.println("Welcome to shop 1 exit; ");
-
-        int x = -1;
-        for (item thing : folder) {
-            x++;
-            ArrayList<Integer> info = new ArrayList<Integer>();
-
-            for(int dice : thing.base_pool){
-                info.add(dice);
-            }
-            ArrayList<String> info2 = new ArrayList<String>();
-            for(effect spell : thing.magic_pool){
-                info2.add(spell.short_print());
-            }
-            // printing details about items
-            output.shop_print(thing, x, info, info2);
-        }
-
-        //System.out.println(inputs_shop(folder)); // it is so not working correctly, and first printf replaces it ^
+        manager.shop_folder(folder);
 
         int choice = 0;
         while (choice != 9)
         {
-            choice = input.choice();
+            choice = manager.choice("");
 
             if (choice == 1) return;
             else if (choice > 1 && folder.get(choice - 2).Does_Fit(player))
@@ -92,56 +74,22 @@ public class economy // alpha 2.1
     }
 
 
-    static ArrayList<String> inputs_shop(ArrayList<item> shop_list) // code not used, most likely to be deleted
-    {
-        ArrayList<String> options = new ArrayList<>();
-        if (shop_list.size() < 7) // code would still work, it's just a design choice
-        {
-            int x = 1; // we added folders
-            for(item thing : shop_list)
-            {
-                x += 1;
-                //options.add(x +"  Item - " + roman_numbers(thing.level));
-            }
-        }
-        else
-        {
-            System.out.println("folders_generator failed");
-        }
-        return options;
-    }
-
-
-
     static void shop(hero player, ArrayList<item> item_list)
     { // general shop interface
         ArrayList<ArrayList<item>> folders = generate_folders(item_list);
 
         int choice = 0;
-        while (choice != 9) {
+        while (choice != 1) {
+            // GAMEPLAY
+            manager.shop(folders.size());
+            choice = manager.choice("");  // Read user input
+            // END
 
-            // Info for player
-            System.out.print("Welcome to shop 1 exit; 2 medic's shop;");
-
-            for (int i = 0; i < folders.size(); i++)
-            {
-                System.out.print(i+3 + " folder ");
-            }
-            System.out.println();
-
-
-            choice = input.choice();  // Read user input
-
-
-            if (choice == 1)
-            {
-                choice = 9; // exit
-            }
-            else if (choice == 2)
+            if (choice == 2)
             {
                 medic(player); //
             }
-            else
+            else if (choice > 2 && choice < folders.size()+3)
             {
                 open_folder(player, folders.get(choice-3));
             }
@@ -153,16 +101,9 @@ public class economy // alpha 2.1
     {
         int[][] healing  = {{2, 3}, {3, 5}, {4, 6}, {6, 8}};
 
-        output.print("Welcome to medic's shop 1 exit  2 max_heal  3 auto_heal  ");
-        int x = 4;
-        for(int[] item : healing)
-        {
-            output.print(x++ + " [heal: " + item[0] + " price: " + item[1] + "] ");
-        }
 
-        output.println("");
-
-        int choice = input.choice();  // User input
+        manager.medic(healing);
+        int choice = manager.choice("");  // User input
 
         // if (choice == 1)  {} // exit medic shop
         if(choice == 2)
@@ -173,12 +114,12 @@ public class economy // alpha 2.1
                 player.pay(healing[0][1]);
                 player.heal(healing[0][0]);
             }
-            output.println("gold: " + player.gold + " HP: " + player.HP);
+            manager.println("gold: " + player.gold + " HP: " + player.HP);
         }
         else if (choice == 3)
         { // auto-heal to without wasting money on last points of hp
             autoHeal(player, healing);
-            output.println("gold: " + player.gold + " HP: " + player.HP);
+            manager.println("gold: " + player.gold + " HP: " + player.HP);
         }
         else if (choice > 3 && choice < 1 + healing.length) //enter healing manually
         {
@@ -188,12 +129,9 @@ public class economy // alpha 2.1
             }
             else
             {
-                output.println("Not enough money");
+                manager.println("Not enough money, your gold: "
+                        + player.gold + " required: " + healing[choice - 4][1]);
             }
-        }
-        else
-        {
-            output.println("Wrong choice");
         }
     }
 

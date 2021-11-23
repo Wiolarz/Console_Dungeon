@@ -70,7 +70,7 @@ public class quest
                 fail_story = "Time has run out, and village was burned to the ground by our glorious king";
 
                 type = "gold";
-                quest_gold = balance.weak * current_day;
+                quest_gold = balance.medium * current_day;
             }
             case 2 -> // monsters to kill
             {
@@ -81,7 +81,7 @@ public class quest
                 target_place = loc_time[0];
                 monsters_to_kill = loc_time[2];
             }
-            default -> output.error("quest random_quest() -> switch_random");
+            default -> manager.error("quest random_quest() -> switch_random");
         }
 
 
@@ -108,7 +108,7 @@ public class quest
                 case "boss", "monsters" -> {} // those are checked in locations
                 case "gold" -> {if (player.pay(quest_gold))
                 {
-                    output.println("You have helped poor villagers");
+                    manager.println("You have helped poor villagers");
                     Main.main_quest = new quest(Main.days);
 
                 }}
@@ -116,7 +116,7 @@ public class quest
         }
         catch (Exception e)
         {
-            output.error("quest check_quest() -> wrong type");
+            manager.error("quest check_quest() -> wrong type");
         }
 
     }
@@ -124,23 +124,23 @@ public class quest
 
     public void print_info()
     {
-        output.println("You have: " + days_to_complete + " days to " + story);
+        manager.println("You have: " + days_to_complete + " days to " + story);
         switch (type)
         {
             case "boss" ->
             {
-                output.println("Enemy boss awaits at " + output.roman_numbers(target_place+1) + " location");
+                manager.println("Enemy boss awaits at " + manager.roman_numbers(target_place+1) + " location");
             }
             case "gold" ->
             {
-                output.println("You need to gather " + quest_gold);
+                manager.println("You need to gather " + quest_gold);
             }
             case "monsters" ->
             {
-                output.println("Enemy monsters awaits at " + output.roman_numbers(target_place+1) + " location " +
+                manager.println("Enemy monsters awaits at " + manager.roman_numbers(target_place+1) + " location " +
                         monsters_to_kill + " are still alive");
             }
-            default -> output.error("quest print_info() -> wrong type");
+            default -> manager.error("quest print_info() -> wrong type");
         }
 
     }

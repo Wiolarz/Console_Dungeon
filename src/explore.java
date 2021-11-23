@@ -13,10 +13,10 @@ public class explore // alpha 2.2
 
             if(event <= place.chest_chance)
             {
-                output.println("You found a chest");
+                manager.println("You found a chest");
                 chest(company, place.chest_gold);
             } else {
-                output.println("You fight");
+                manager.println("You fight");
                 if (fight(company, generate_enemy(place.level)))
                 {
                     killed += place.level;
@@ -25,25 +25,22 @@ public class explore // alpha 2.2
         }
         if (Main.main_quest.type.equals("boss") && Main.main_quest.target_place == place.id)
         {
-            output.println("You encounter boss, his level: " + place.quest_level);
+            manager.println("You encounter boss, his level: " + place.quest_level);
+
             ArrayList<monster> boss = new ArrayList<>();
             boss.add(new monster(place.quest_level));
             if(fight(company, boss))
             {
-                output.println("You won");
-                output.println("New quest: ");
                 Main.main_quest = new quest(day);
                 Main.main_quest.days_to_complete++;
             }
         }
         else if (Main.main_quest.type.equals("monsters") && Main.main_quest.target_place == place.id)
         {
-            output.println("you have defeated " + killed + " monsters");
+            manager.println("you have defeated " + killed + " monsters");
             Main.main_quest.monsters_to_kill -= killed;
             if(Main.main_quest.monsters_to_kill <= 0)
             {
-                output.println("You won");
-                output.println("New quest: ");
                 Main.main_quest = new quest(day);
                 Main.main_quest.days_to_complete++;
             }
@@ -111,7 +108,7 @@ public class explore // alpha 2.2
                 enemy.add(new monster(level));
             }
 
-            default -> {output.debug("explore.generate_enemy switch case error");}
+            default -> {manager.debug("explore.generate_enemy switch case error");}
         }
 
         return enemy;
@@ -244,7 +241,7 @@ public class explore // alpha 2.2
 
         for (int rounds = 1; rounds < 50; rounds++)
         {
-            int choice = input.choice();
+            int choice = manager.choice("");
 
             switch (choice)
             {
@@ -264,7 +261,7 @@ public class explore // alpha 2.2
                     // checking dead enemy
                     if (graveyard_monster(enemy))
                     {
-                        output.println("You have won this fight");
+                        manager.println("You have won this fight");
                         company.get(0).experience(challenge);
                         return true;
                     }
@@ -276,8 +273,7 @@ public class explore // alpha 2.2
             // checking dead in company
             if (graveyard_hero(company))
             {
-                output.println("Your company has been defeated GAME OVER");
-                System.exit(666);
+                manager.exit("Your company has been defeated GAME OVER", "fight");
             }
 
         }
@@ -287,28 +283,24 @@ public class explore // alpha 2.2
 
     static boolean walking(ArrayList<hero> company, ArrayList<location> world, int day)
     {
-        int choice;
-
-        while (true)
+        // GAMEPLAY
+        manager.print("1 Exit ");
+        int x = 2;
+        for (location place : world)
         {
-            output.print("1 Exit  ");
-            int x = 2;
-            for (location place : world)
-            {
-                output.print(x + " " + place.short_print() + "  ");
-                x++;
-            }
-            output.println("");
-
-            choice = input.choice();  // User input
-
-            if (choice == 1) return false; // exit world map
-            else if (choice > 1) // enter location
-            {
-                walk(company, world.get(choice - 2), day);
-                return true;
-            }
+            manager.print(x + " " + place.short_print() + " ");
+            x++;
         }
+        int choice = manager.choice("");  // User input
+        // END
+
+        //if (choice == 1) return false; // exit world map
+        if (choice > 1 && choice < world.size() + 2) // enter location
+        {
+            walk(company, world.get(choice - 2), day);
+            return true;
+        }
+        return false;
     }
 
 

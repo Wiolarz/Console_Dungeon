@@ -57,7 +57,7 @@ public class hero extends unit // alpha 2.2
         if (power < 1)
         {
             power = 1;
-            output.debug("minus level for mercenary");
+            manager.debug("minus level for mercenary");
         }
         mercenary.level = power;
 
@@ -149,12 +149,12 @@ public class hero extends unit // alpha 2.2
         System.out.print("MAGIC: ");
         for (ArrayList<effect> spell_list : magic)
         {
-            output.print("[");
+            manager.print("[");
             for (effect spell : spell_list)
             {
-                output.print(spell.short_print());
+                manager.print(spell.short_print());
             }
-            output.print("] ");
+            manager.print("] ");
         }
         System.out.println();
         System.out.println("Gold: " + gold + " Level: " + level + " Exp: " + exp);

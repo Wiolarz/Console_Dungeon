@@ -18,7 +18,7 @@ public class monster extends unit // alpha 2.2
         if (power < 1)
         {
             power = 1;
-            output.debug("minus level for monster");
+            manager.error("minus level for monster");
         }
         level = power;
 

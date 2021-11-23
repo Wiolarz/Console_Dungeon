@@ -33,7 +33,7 @@ public class location // Aplha 2.1
     }
     public String short_print()
     {
-        return name + " " + output.roman_numbers(level);
+        return name + " " + manager.roman_numbers(level);
     }
 
     static String name_generator()
@@ -50,7 +50,7 @@ public class location // Aplha 2.1
             cheking_wrong_balance++;
             if (cheking_wrong_balance > balance.location_number*5)
             {
-                output.debug("Error: cannot create random new location name");
+                manager.debug("Error: cannot create random new location name");
                 System.exit(343);
             }
             new_name = prefix[(int)(Math.random() * prefix.length)] + " "
