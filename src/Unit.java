@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
-abstract class unit // alpha 2.1
+abstract class Unit // alpha 2.1
 {
     int STR; // STRENGTH number of sides in bonus dices
     int AG;  // AGILITY number of additional dices
     int INT; // INTELLIGENCE number of additional effects
 
-    int HP;  // health points
+    public int HP;  // health points
     int max_HP;
 
-    item artefact;  // only one object item can be assigned to a unit
+    Item artefact;  // only one object item can be assigned to a Unit
 
     ArrayList<Integer> dice_pool = new ArrayList<>();  // full list of dices used to generate strategy
     ArrayList<Integer> turn_pool = new ArrayList<>();
@@ -21,13 +21,13 @@ abstract class unit // alpha 2.1
 
 
 
-    ArrayList<effect> effects_pool = new ArrayList<>();  // full list of dices used to generate strategy
+    ArrayList<Effect> effects_pool = new ArrayList<>();  // full list of dices used to generate strategy
 
-    ArrayList<ArrayList<effect>> magic;  // 3 lists of effects used for fighting
+    ArrayList<ArrayList<Effect>> magic;  // 3 lists of effects used for fighting
 
-    unit()
+    Unit()
     {// this works before Hero()
-        attack_speed = 1; // every unit has at least 1 attack
+        attack_speed = 1; // every Unit has at least 1 attack
 
         strategy = new ArrayList<>(attack_speed);
         magic = new ArrayList<>(attack_speed);
@@ -43,7 +43,7 @@ abstract class unit // alpha 2.1
 
 
 
-    public void item_change(item thing)
+    public void item_change(Item thing)
     {
         dice_pool.clear();
         effects_pool.clear();
@@ -56,7 +56,7 @@ abstract class unit // alpha 2.1
         turn_pool = (ArrayList<Integer>) dice_pool.clone();
 
         // adding item effect pool
-        for(effect spell : thing.magic_pool)
+        for(Effect spell : thing.magic_pool)
         {
             effects_pool.add(spell);
         }
@@ -91,7 +91,7 @@ abstract class unit // alpha 2.1
         {
 
             strategy.add(new ArrayList<Integer>());
-            magic.add(new ArrayList<effect>());
+            magic.add(new ArrayList<Effect>());
         }
 
         int counter = 0;
@@ -129,7 +129,7 @@ abstract class unit // alpha 2.1
     public void effect(ArrayList<Integer> dices, int round)
     {// we are making copy to avoid saving effect to an object
 
-        for (effect spell : magic.get(round))
+        for (Effect spell : magic.get(round))
         {
             spell.use(dices);
         }
@@ -151,19 +151,19 @@ abstract class unit // alpha 2.1
 
 
     public void printing_all_stats()
-    { // we print every unit value
-        manager.println("STR: " + STR + " AG: " + AG + " INT: " + INT);
-        manager.println("HP: " + HP + " MAX_HP: " + max_HP);
-        manager.println("Item base: " + dice_pool);
-        manager.println("Strategy: " + strategy);
-        manager.print("Magic: ");
-        for (ArrayList<effect> spell_list : magic)
+    { // we print every Unit value
+        Manager.println("STR: " + STR + " AG: " + AG + " INT: " + INT);
+        Manager.println("HP: " + HP + " MAX_HP: " + max_HP);
+        Manager.println("Item base: " + dice_pool);
+        Manager.println("Strategy: " + strategy);
+        Manager.print("Magic: ");
+        for (ArrayList<Effect> spell_list : magic)
         {
-            for (effect spell : spell_list)
+            for (Effect spell : spell_list)
             {
-                manager.print(spell.short_print());
+                Manager.print(spell.short_print());
             }
         }
-        manager.println("");
+        Manager.println("");
     }
 }

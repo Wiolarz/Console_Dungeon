@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class manager
+public class Manager
 {
     static void debug(String txt)
     {
@@ -67,11 +67,11 @@ public class manager
         System.out.println();
     }
 
-    static void shop_folder(ArrayList<item> folder)
+    static void shop_folder(ArrayList<Item> folder)
     {
         System.out.println("Welcome to shop 1 exit; ");
         int x = -1;
-        for (item thing : folder) {
+        for (Item thing : folder) {
             x++;
             ArrayList<Integer> info = new ArrayList<Integer>();
 
@@ -79,12 +79,12 @@ public class manager
                 info.add(dice);
             }
             ArrayList<String> info2 = new ArrayList<String>();
-            for(effect spell : thing.magic_pool){
+            for(Effect spell : thing.magic_pool){
                 info2.add(spell.short_print());
             }
             // printing details about items
             System.out.printf("%-16s", x+2 + " level: " + roman_numbers(thing.level));
-            System.out.printf("%-12s", ("price: " + thing.level * balance.medium));
+            System.out.printf("%-12s", ("price: " + thing.level * Balance.medium));
             System.out.printf("%-34s", ("STR_req: " + thing.STR_req + " AG_req: " + thing.AG_req + " INT_req: " + thing.INT_req));
             System.out.printf("%-70s", ("base: " + info));
             System.out.printf("%-70s", ("Magic: " + info2));

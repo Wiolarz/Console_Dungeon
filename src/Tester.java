@@ -1,4 +1,4 @@
-public class tester // 2.2
+public class Tester // 2.2
 {
     static boolean quest_creator()
     {
@@ -6,7 +6,7 @@ public class tester // 2.2
         {
             for (int day = -5; day < 10000; day++)
             {
-                quest quest_object = new quest(day);
+                Quest quest_object = new Quest(day);
                 //quest_object.print_info();
             }
 
@@ -24,7 +24,7 @@ public class tester // 2.2
         {
             for (int level = -5; level < 10; level++)
             {
-                location location_object = new location(level);
+                Location location_object = new Location(level);
                 //quest_object.print_info();
                 System.out.println(location_object.id);
             }
@@ -45,7 +45,7 @@ public class tester // 2.2
             System.out.println("------------------------ITEM LEVEL" + i + "--------------------");
             System.out.println();
             for (int j = 0; j < 9; j++) {
-                item thing = new item(i);
+                Item thing = new Item(i);
                 System.out.println();
                 thing.print_item();
                 System.out.println();
@@ -70,9 +70,9 @@ public class tester // 2.2
         {
             for (int i = 0; i < attempts; i++)
             {
-                for (int level = -1; level < balance.max_power; level++)
+                for (int level = -1; level < Balance.max_power; level++)
                 {
-                    monster enemy = new monster(level);
+                    Monster enemy = new Monster(level);
                     //quest_object.print_info();
                     //enemy.printing_all_stats();
                 }
@@ -95,8 +95,8 @@ public class tester // 2.2
         {
             for (int level = -5; level < 10; level++)
             {
-                hero player = new hero();
-                monster enemy = new monster(level);
+                Hero player = new Hero();
+                Monster enemy = new Monster(level);
                 //quest_object.print_info();
                 //System.out.println(explore.fight(player, enemy));
             }
@@ -115,7 +115,7 @@ public class tester // 2.2
         try
         {
             int[][] healing  = {{2, 3}, {3, 5}, {4, 6}, {6, 8}};
-            hero player = new hero();
+            Hero player = new Hero();
             for (int max = 1; max < 100; max++)
             {
                 player.max_HP = max;
@@ -125,7 +125,7 @@ public class tester // 2.2
                     for (int health = 1; health <= max; health++)
                     {
                         player.HP = health;
-                        economy.autoHeal(player, healing);
+                        Economy.autoHeal(player, healing);
                     }
                 }
             }

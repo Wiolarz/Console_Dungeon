@@ -1,4 +1,4 @@
-public class quest
+public class Quest
 {
     // basic complexity
 
@@ -15,7 +15,7 @@ public class quest
     String story;
     String fail_story;
 
-    quest(int current_day)
+    Quest(int current_day)
     {
         random_quest(current_day);
     }
@@ -27,26 +27,26 @@ public class quest
         int time;
 
         // days to complete quest
-        int base = balance.weak;
+        int base = Balance.weak;
         int[][] difficulty = {
-                {base * balance.week, balance.powerful, 3},
-                {base * balance.medium, balance.strong, 2},
-                {base * balance.strong, balance.medium, 1},
-                {base * balance.powerful, balance.week, 1}
+                {base * Balance.week, Balance.powerful, 3},
+                {base * Balance.medium, Balance.strong, 2},
+                {base * Balance.strong, Balance.medium, 1},
+                {base * Balance.powerful, Balance.week, 1}
         };
 
         for (int[] level : difficulty)
         {
             if (current_day < level[0])
             {
-                location = (int)(Math.random() * (balance.location_number / level[2]));
+                location = (int)(Math.random() * (Balance.location_number / level[2]));
                 time = level[1];
                 return new int[]{location, time, level[0]};
             }
         }
         time = 1;
-        location = balance.location_number-1; // last spot
-        return new int[]{location, time, base * balance.powerful};
+        location = Balance.location_number-1; // last spot
+        return new int[]{location, time, base * Balance.powerful};
     }
 
     public void random_quest(int current_day)
@@ -70,7 +70,7 @@ public class quest
                 fail_story = "Time has run out, and village was burned to the ground by our glorious king";
 
                 type = "gold";
-                quest_gold = balance.medium * current_day;
+                quest_gold = Balance.medium * current_day;
             }
             case 2 -> // monsters to kill
             {
@@ -81,7 +81,7 @@ public class quest
                 target_place = loc_time[0];
                 monsters_to_kill = loc_time[2];
             }
-            default -> manager.error("quest random_quest() -> switch_random");
+            default -> Manager.error("quest random_quest() -> switch_random");
         }
 
 
@@ -99,7 +99,7 @@ public class quest
 
     }
 
-    public void check_quest(hero player)
+    public void check_quest(Hero player)
     {
         try
         {
@@ -108,15 +108,15 @@ public class quest
                 case "boss", "monsters" -> {} // those are checked in locations
                 case "gold" -> {if (player.pay(quest_gold))
                 {
-                    manager.println("You have helped poor villagers");
-                    Main.main_quest = new quest(Main.days);
+                    Manager.println("You have helped poor villagers");
+                    Main.main_quest = new Quest(Main.days);
 
                 }}
             }
         }
         catch (Exception e)
         {
-            manager.error("quest check_quest() -> wrong type");
+            Manager.error("quest check_quest() -> wrong type");
         }
 
     }
@@ -124,23 +124,23 @@ public class quest
 
     public void print_info()
     {
-        manager.println("You have: " + days_to_complete + " days to " + story);
+        Manager.println("You have: " + days_to_complete + " days to " + story);
         switch (type)
         {
             case "boss" ->
             {
-                manager.println("Enemy boss awaits at " + manager.roman_numbers(target_place+1) + " location");
+                Manager.println("Enemy boss awaits at " + Manager.roman_numbers(target_place+1) + " location");
             }
             case "gold" ->
             {
-                manager.println("You need to gather " + quest_gold);
+                Manager.println("You need to gather " + quest_gold);
             }
             case "monsters" ->
             {
-                manager.println("Enemy monsters awaits at " + manager.roman_numbers(target_place+1) + " location " +
+                Manager.println("Enemy monsters awaits at " + Manager.roman_numbers(target_place+1) + " location " +
                         monsters_to_kill + " are still alive");
             }
-            default -> manager.error("quest print_info() -> wrong type");
+            default -> Manager.error("quest print_info() -> wrong type");
         }
 
     }
