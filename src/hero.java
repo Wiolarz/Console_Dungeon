@@ -6,7 +6,7 @@ public class hero extends unit // alpha 2.2
     int exp = 0;
     int gold = 0;
 
-    static hero generate()
+    static hero generate() // not used
     {
         hero dude = new hero();
         return dude;
@@ -31,15 +31,11 @@ public class hero extends unit // alpha 2.2
         INT = role[2];
 
 
-
         artefact = new item(1);
         artefact.set_stats(STR, AG, INT);
 
 
-
-
         item_change(artefact);
-        generate_strategy();
 
         max_HP = level * balance.strong;
         HP = max_HP;
@@ -70,11 +66,8 @@ public class hero extends unit // alpha 2.2
         mercenary.INT = role[2];
 
 
-
-
         mercenary.artefact = new item(power);
         mercenary.item_change(mercenary.artefact);
-        mercenary.generate_strategy();
 
         mercenary.max_HP = power;
         mercenary.HP = mercenary.max_HP;

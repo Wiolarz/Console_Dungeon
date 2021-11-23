@@ -84,11 +84,14 @@ abstract class unit // alpha 2.1
     {
         // adjusting attack speed
 
+        strategy.clear();
+        magic.clear();
+
         for (int i = 0; i < attack_speed; i++)
         {
 
-            strategy.get(i).clear();
-            magic.get(i).clear();
+            strategy.add(new ArrayList<Integer>());
+            magic.add(new ArrayList<effect>());
         }
 
         int counter = 0;
@@ -120,18 +123,14 @@ abstract class unit // alpha 2.1
 
 
 
-    public ArrayList<Integer> effect(ArrayList<Integer> dices, int round)
+    public void effect(ArrayList<Integer> dices, int round)
     {// we are making copy to avoid saving effect to an object
-        ArrayList<Integer> new_dices = new ArrayList<>(dices);
-
 
         for (effect spell : magic.get(round))
         {
-            spell.use(new_dices);
+            spell.use(dices);
         }
 
-
-        return new_dices;
     }
 
 

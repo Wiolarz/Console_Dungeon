@@ -193,7 +193,6 @@ public class explore // alpha 2.2
             }
         }
     }
-
     private static void turn_attacks_monster(ArrayList<monster> enemy, ArrayList<hero> company)
     {
         // before enemy attack we remove effects from players
