@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class economy // alpha 2.1
 {
-
     static ArrayList<item> generate_items(int days){
         // generation of list of item objects to a shop
         ArrayList<item> items = new ArrayList<item>();
@@ -51,7 +50,6 @@ public class economy // alpha 2.1
     }
 
 
-
     private static void open_folder(hero player, ArrayList<item> folder)
     {// interface to buy items from a smaller folder of items
 
@@ -74,10 +72,7 @@ public class economy // alpha 2.1
             output.shop_print(thing, x, info, info2);
         }
 
-
         //System.out.println(inputs_shop(folder)); // it is so not working correctly, and first printf replaces it ^
-
-
 
         int choice = 0;
         while (choice != 9)
@@ -97,8 +92,8 @@ public class economy // alpha 2.1
     }
 
 
-    static ArrayList<String> inputs_shop(ArrayList<item> shop_list){
-        // code not used, most likely to be deleted
+    static ArrayList<String> inputs_shop(ArrayList<item> shop_list) // code not used, most likely to be deleted
+    {
         ArrayList<String> options = new ArrayList<>();
         if (shop_list.size() < 7) // code would still work, it's just a design choice
         {
@@ -138,21 +133,27 @@ public class economy // alpha 2.1
             choice = input.choice();  // Read user input
 
 
-            if (choice == 1){
+            if (choice == 1)
+            {
                 choice = 9; // exit
-            } else if (choice == 2){
+            }
+            else if (choice == 2)
+            {
                 medic(player); //
-            } else
+            }
+            else
             {
                 open_folder(player, folders.get(choice-3));
             }
         }
     }
 
-    static void medic(hero player) {
+
+    static void medic(hero player)
+    {
         int[][] healing  = {{2, 3}, {3, 5}, {4, 6}, {6, 8}};
 
-        output.print("Welcome to medic's shop 1 exit; 2 max_heal 3 auto_heal");
+        output.print("Welcome to medic's shop 1 exit  2 max_heal  3 auto_heal  ");
         int x = 4;
         for(int[] item : healing)
         {
@@ -197,8 +198,6 @@ public class economy // alpha 2.1
     }
 
 
-
-
     static void autoHeal(hero player, int[][] healing)
     {
         for (int item = healing.length - 1; item >= 0; item--)
@@ -210,6 +209,4 @@ public class economy // alpha 2.1
             }
         }
     }
-
-
 }
