@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class location // Aplha 2.1
+public class Location // Aplha 2.1
 {
     static int identification = 0;
     int id;
@@ -14,26 +14,26 @@ public class location // Aplha 2.1
 
     String name;
 
-    location(int location_level)
+    Location(int location_level)
     { // takes level of location, generates events
-        id = location.identification++; // debug
-
+        id = Location.identification++; // debug
 
         name = name_generator();
 
         level = location_level;
         quest_level = level+2;
-        if (quest_level > balance.max_power) quest_level = balance.max_power;
+        if (quest_level > Balance.max_power) quest_level = Balance.max_power;
 
-        chest_gold = level * balance.medium;
+        chest_gold = level * Balance.medium;
 
         density = 5; // number of events in location
         chest_chance = 3; // %(10) chest chance
         quest_enemy = 5; // %(10) chance of quest related enemy
     }
+
     public String short_print()
     {
-        return name + " " + manager.roman_numbers(level);
+        return name + " " + Manager.roman_numbers(level);
     }
 
     static String name_generator()
@@ -48,16 +48,16 @@ public class location // Aplha 2.1
         while (!new_unique)
         {
             cheking_wrong_balance++;
-            if (cheking_wrong_balance > balance.location_number*5)
+            if (cheking_wrong_balance > Balance.location_number*5)
             {
-                manager.debug("Error: cannot create random new location name");
+                Manager.debug("Error: cannot create random new location name");
                 System.exit(343);
             }
             new_name = prefix[(int)(Math.random() * prefix.length)] + " "
                     + core[(int)(Math.random() * core.length)];
 
             new_unique = true;
-            for (String name : balance.location_names)
+            for (String name : Balance.location_names)
             {
                 if (Objects.equals(name, new_name))
                 {
@@ -66,7 +66,7 @@ public class location // Aplha 2.1
                 }
             }
         }
-        balance.location_names.add(new_name);
+        Balance.location_names.add(new_name);
         return new_name;
     }
 

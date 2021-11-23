@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class balance // alpha 2.1
+public class Balance // alpha 2.1
 {
     // set of dices used in a game, its number should not be smaller than 1
     // length min(2) else effects will not work
@@ -20,7 +20,7 @@ public class balance // alpha 2.1
     public static int medium = 3;
     public static int weak = 1;
 
-    public static int rare = 30; // % chance for something rare to occur
+    //public static int rare = 30; // % chance for something rare to occur
 
     public static int events = 5; // number of events in locations
 
@@ -44,7 +44,7 @@ public class balance // alpha 2.1
 
 
 
-    static void split_dices()
+    /*static void split_dices()
     { // splitting dices into groups based on their highest multiplier
         // kinda works, most likely useless
 
@@ -54,7 +54,7 @@ public class balance // alpha 2.1
         {
             groups.add(new ArrayList<>());
             System.out.print(i + " ");
-            for (int dice : balance.dices)
+            for (int dice : Balance.dices)
             {
                 if (dice % i == 0)
                 {
@@ -95,5 +95,5 @@ public class balance // alpha 2.1
         }
         System.out.println(fin);
 
-    }
+    }*/
 }

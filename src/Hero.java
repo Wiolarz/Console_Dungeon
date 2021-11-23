@@ -1,18 +1,18 @@
 import java.util.ArrayList;
 
-public class hero extends unit // alpha 2.2
+public class Hero extends Unit implements Fightable // alpha 2.2
 {
     int level = 1;
     int exp = 0;
     int gold = 0;
 
-    static hero generate() // not used
+    static Hero generate() // not used
     {
-        hero dude = new hero();
+        Hero dude = new Hero();
         return dude;
     }
 
-    hero()
+    Hero()
     {
         create_hero();
     }
@@ -31,13 +31,13 @@ public class hero extends unit // alpha 2.2
         INT = role[2];
 
 
-        artefact = new item(1);
+        artefact = new Item(1);
         artefact.set_stats(STR, AG, INT);
 
 
         item_change(artefact);
 
-        max_HP = level * balance.strong;
+        max_HP = level * Balance.strong;
         HP = max_HP;
 
 
@@ -45,9 +45,9 @@ public class hero extends unit // alpha 2.2
         gold = 10;
     }
 
-    static hero create_mercenary(int power)
+    static Hero create_mercenary(int power)
     {
-        hero mercenary = new hero();
+        Hero mercenary = new Hero();
         int[] knight = {3, 2, 1};
         int[] rouge = {2, 3, 1};
         int[] mage = {1, 2, 3};
@@ -57,7 +57,7 @@ public class hero extends unit // alpha 2.2
         if (power < 1)
         {
             power = 1;
-            manager.debug("minus level for mercenary");
+            Manager.debug("minus level for mercenary");
         }
         mercenary.level = power;
 
@@ -66,7 +66,7 @@ public class hero extends unit // alpha 2.2
         mercenary.INT = role[2];
 
 
-        mercenary.artefact = new item(power);
+        mercenary.artefact = new Item(power);
         mercenary.item_change(mercenary.artefact);
 
         mercenary.max_HP = power;
@@ -89,19 +89,19 @@ public class hero extends unit // alpha 2.2
 
     public void experience(int value)
     {
-        exp += value * balance.weak;
-        while (exp > (level * balance.levelup_speed)) {
-            if ((STR+AG+INT) == balance.dices.length*3){
+        exp += value * Balance.weak;
+        while (exp > (level * Balance.levelup_speed)) {
+            if ((STR+AG+INT) == Balance.dices.length*3){
                 return; // max level
             }
-            exp -= (level * balance.levelup_speed);
+            exp -= (level * Balance.levelup_speed);
             level += 1;
 
 
             ArrayList<Integer> levelups = new ArrayList<>();
-            if (STR < balance.dices.length) levelups.add(0);
-            if (AG < balance.dices.length) levelups.add(1);
-            if (INT < balance.dices.length) levelups.add(2);
+            if (STR < Balance.dices.length) levelups.add(0);
+            if (AG < Balance.dices.length) levelups.add(1);
+            if (INT < Balance.dices.length) levelups.add(2);
             if (levelups.size() > 0){
                 switch (levelups.get((int)((Math.random()*levelups.size())))) {
                     case 0-> STR++;
@@ -118,8 +118,8 @@ public class hero extends unit // alpha 2.2
     private void stat_changed()
     {
         // adjusting HP
-        int hp_correct = (level * balance.strong)-max_HP;
-        max_HP = level * balance.strong;
+        int hp_correct = (level * Balance.strong)-max_HP;
+        max_HP = level * Balance.strong;
         HP += hp_correct;
 
         //item_change(artefact); // currently not used
@@ -147,14 +147,14 @@ public class hero extends unit // alpha 2.2
         System.out.println("Item base: " + dice_pool);
         System.out.println("Strategy: " + strategy);
         System.out.print("MAGIC: ");
-        for (ArrayList<effect> spell_list : magic)
+        for (ArrayList<Effect> spell_list : magic)
         {
-            manager.print("[");
-            for (effect spell : spell_list)
+            Manager.print("[");
+            for (Effect spell : spell_list)
             {
-                manager.print(spell.short_print());
+                Manager.print(spell.short_print());
             }
-            manager.print("] ");
+            Manager.print("] ");
         }
         System.out.println();
         System.out.println("Gold: " + gold + " Level: " + level + " Exp: " + exp);

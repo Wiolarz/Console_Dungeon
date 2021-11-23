@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
-public class item // alpha 2.1
+public class Item // alpha 2.1
 {
     int[] base_pool;
-    ArrayList<effect> magic_pool;
+    ArrayList<Effect> magic_pool;
     // those are stats bonuses
     int STR_req;
     int AG_req;
@@ -12,7 +12,7 @@ public class item // alpha 2.1
     int level;
 
 
-    item(int power) // String type,
+    Item(int power) // String type,
     {
         /*switch (type)
         {
@@ -30,8 +30,8 @@ public class item // alpha 2.1
         STR STR STR is a powerful strength item, while AG AG INT is a mix
         */
 
-        if (power > balance.max_power)
-            power = balance.max_power;
+        if (power > Balance.max_power)
+            power = Balance.max_power;
         level = power;
 
         int[] type = {0,0,0}; // used to create types of items
@@ -47,9 +47,9 @@ public class item // alpha 2.1
         {
             switch (type[counter])
             {
-                case 0-> {if (STR_req!=balance.dices.length) STR_req++;}
-                case 1-> {if (AG_req!=balance.dices.length) AG_req++;}
-                case 2-> {if (INT_req!=balance.dices.length) INT_req++;}
+                case 0-> {if (STR_req!= Balance.dices.length) STR_req++;}
+                case 1-> {if (AG_req!= Balance.dices.length) AG_req++;}
+                case 2-> {if (INT_req!= Balance.dices.length) INT_req++;}
             }
 
             counter++;
@@ -84,30 +84,31 @@ public class item // alpha 2.1
 
 
         // we are adding randomly sized dices to the pool in a number equal to "power" of the item
-        final int len = balance.dices.length;
+        final int len = Balance.dices.length;
         final int weak_dices =   (len / 4);
         final int normal_dices = (len / 2);
         //int strong_dices =
 
-        for (int i = 0; i < STR_req; i++)
+        // based on statistics we add different types of dices
+        for (int i = 0; i < STR_req; i++)  // big sized dices
         {
-            base.add(balance.dices[(int)(Math.random() * (len - 3)) + 3]); // magic number no sadge
+            base.add(Balance.dices[(int)(Math.random() * (len - 3)) + 3]); // magic number no sadge
         }
 
-        for (int i = 0; i < AG_req; i++)
+        for (int i = 0; i < AG_req; i++) // many smaller dices
         {
-            base.add(balance.dices[(int)(Math.random() * weak_dices)]);
-            base.add(balance.dices[(int)(Math.random() * normal_dices)]);;
+            base.add(Balance.dices[(int)(Math.random() * weak_dices)]);
+            base.add(Balance.dices[(int)(Math.random() * normal_dices)]);
         }
 
-        for (int i = 0; i < INT_req; i++)
+        for (int i = 0; i < INT_req; i++)  // magic
         {
-            base.add(balance.dices[(int)(Math.random() * weak_dices)]);
+            base.add(Balance.dices[(int)(Math.random() * weak_dices)]);
             switch ((int) (Math.random()*3))
             {
-                case 0 -> magic_pool.add(new effect(1, "edge", 2));
-                case 1 -> magic_pool.add(new effect(2, "edge", 1));
-                case 2 -> magic_pool.add(new effect(1, "random", 3));
+                case 0 -> magic_pool.add(new Effect(1, "edge", 2));
+                case 1 -> magic_pool.add(new Effect(2, "edge", 1));
+                case 2 -> magic_pool.add(new Effect(1, "random", 3));
             }
 
         }
@@ -133,7 +134,7 @@ public class item // alpha 2.1
 
 
 
-    public boolean Does_Fit(unit UNIT)
+    public boolean Does_Fit(Unit UNIT)
     {
         return (UNIT.STR >= STR_req) && (UNIT.AG >= AG_req) && (UNIT.INT >= INT_req);
     }
@@ -147,7 +148,7 @@ public class item // alpha 2.1
             System.out.print(i + " ");
         }
         System.out.println();
-        for(effect spell : magic_pool)
+        for(Effect spell : magic_pool)
         {
             spell.print();
         }

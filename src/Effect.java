@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class effect // alpha 2.2
+public class Effect // alpha 2.2
 {
 
     int usages;
@@ -8,7 +8,7 @@ public class effect // alpha 2.2
     int power;
 
 
-    effect(int usage, String effect_type, int force)
+    Effect(int usage, String effect_type, int force)
     {
         usages = usage;
         type = effect_type;
@@ -27,9 +27,7 @@ public class effect // alpha 2.2
 
     public String short_print()
     {
-        String text = usages + " " + type + " " + power + " ";
-        //System.out.print(text);
-        return text;
+        return usages + " " + type + " " + power + " ";
     }
 
 
@@ -49,10 +47,10 @@ public class effect // alpha 2.2
         int cur_usage = usages;
         for (int i = 0; i < dices.size() && cur_usage > 0; i++) {
 
-            if (dices.get(i) == balance.dices[power])
+            if (dices.get(i) == Balance.dices[power])
             {
                 // effect
-                dices.set(i, balance.smallest_dice_value);
+                dices.set(i, Balance.smallest_dice_value);
 
                 cur_usage--;
             }
@@ -69,7 +67,7 @@ public class effect // alpha 2.2
                 int idx = 0;
                 int dices_idx = 0;
                 int max = dices.get(0);
-                
+
                 for (int dice_val: dices){
                     if (max  < dice_val){
                         max = dice_val;
@@ -107,7 +105,7 @@ public class effect // alpha 2.2
     static int dice_change(int dice, int value){
         // used by other effects to change dice to another one
         int address = 0;
-        for (int d : balance.dices){
+        for (int d : Balance.dices){
             if (d == dice)
                 break;
             
@@ -116,18 +114,19 @@ public class effect // alpha 2.2
 
         for (int i = 0; i < Math.abs(value); i++) {
 
-            if (value>0){
-                if (balance.dices.length-1 == address)
+            if (value>0)
+            {
+                if (Balance.dices.length-1 == address)
                     return dice; // if dice is already at max value we cannot upgrade it
                 address++;
-                dice = balance.dices[address];
-            } else {
+            }
+            else
+            {
                 if (0 == address)
                     return dice; // if dice is already at min value we cannot downgrade it
-                
                 address--;
-                dice = balance.dices[address];
             }
+            dice = Balance.dices[address];
         }
         return dice;
     }

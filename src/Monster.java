@@ -1,8 +1,8 @@
-public class monster extends unit // alpha 2.2
+public class Monster extends Unit implements Fightable // alpha 2.2
 {
     int level;
 
-    monster(int power)
+    Monster(int power)
     {
         create_moster(power);
     }
@@ -18,7 +18,7 @@ public class monster extends unit // alpha 2.2
         if (power < 1)
         {
             power = 1;
-            manager.error("minus level for monster");
+            Manager.error("minus level for monster");
         }
         level = power;
 
@@ -29,7 +29,7 @@ public class monster extends unit // alpha 2.2
 
 
 
-        artefact = new item(power);
+        artefact = new Item(power);
         item_change(artefact);
         generate_strategy();
 
