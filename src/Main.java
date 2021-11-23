@@ -48,7 +48,8 @@ Quest types ideas:
             {
                 case 0 -> {} // starting value, also assigned in case of wrong input
                 case 1, 2 -> {}// if choice was not to explore the days are not passing
-                default ->
+                case 5, 6, 7 -> {} // debug days are not passing
+                default -> // 9 would be used to pass days
                         {
                             main_quest.days_to_complete--;
                             main_quest.check_quest(company.get(0)); //
@@ -97,6 +98,10 @@ Quest types ideas:
                 {
                     company.get(0).attack_speed += 1;
                     company.get(0).generate_strategy();
+                }
+                case 7 ->
+                {
+                    company.get(0).HP -= 1;
                 }
                 case 8 -> company.get(0).cheats(); // :))
             }

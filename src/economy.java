@@ -150,52 +150,66 @@ public class economy // alpha 2.1
     }
 
     static void medic(hero player) {
-        int[][] healing  = {{1, 3}, {2, 5}, {3, 6}, {5, 8}};
+        int[][] healing  = {{2, 3}, {3, 5}, {4, 6}, {6, 8}};
 
-        output.print("Welcome to medic's shop 1 exit; 2 auto-heal ");
-        int x = 3;
+        output.print("Welcome to medic's shop 1 exit; 2 max_heal 3 auto_heal");
+        int x = 4;
         for(int[] item : healing)
+        {
             output.print(x++ + " [heal: " + item[0] + " price: " + item[1] + "] ");
+        }
 
         output.println("");
 
         int choice = input.choice();  // User input
 
-        if (choice == 1) return; // exit medic shop
-        else if(choice == 2) {  // auto-heal to max possible HP
+        // if (choice == 1)  {} // exit medic shop
+        if(choice == 2)
+        {  // auto-heal to max possible HP
             autoHeal(player, healing);
-            return;
+            if (player.HP < player.max_HP && player.gold >= healing[healing.length-1][1])
+            {
+                player.pay(healing[0][1]);
+                player.heal(healing[0][0]);
+            }
+            output.println("gold: " + player.gold + " HP: " + player.HP);
         }
-        else if (choice > 2 && choice < 1 + healing.length) //enter healing manually
+        else if (choice == 3)
+        { // auto-heal to without wasting money on last points of hp
+            autoHeal(player, healing);
+            output.println("gold: " + player.gold + " HP: " + player.HP);
+        }
+        else if (choice > 3 && choice < 1 + healing.length) //enter healing manually
         {
-            if(player.pay(healing[choice - 3][1])) {
-                heal(player, healing[choice - 3][0]);
-                return;
-            } else {
+            if(player.pay(healing[choice - 4][1]))
+            {
+                player.heal(healing[choice - 4][0]);
+            }
+            else
+            {
                 output.println("Not enough money");
-                return;
             }
         }
-        else {
+        else
+        {
             output.println("Wrong choice");
-            return;
         }
     }
 
-    static void heal(hero player, int heal) {
-        if(player.HP + heal <= player.max_HP) player.HP += heal;
-        else player.HP = player.max_HP;
-    }
+
+
 
     static void autoHeal(hero player, int[][] healing)
     {
-        while(player.gold >= healing[0][1] && player.HP < player.max_HP) {
-            for (int item = healing.length - 1; item >= 0; item--) {
-                while(player.HP + healing[item][0] <= player.max_HP && player.pay(healing[item][1])) {
-                    player.HP += healing[item][0];
-                }
+        for (int item = healing.length - 1; item >= 0; item--)
+        {
+            while(player.HP + healing[item][0] <= player.max_HP && player.gold >= healing[item][1])
+            {
+                player.pay(healing[item][1]);
+                player.heal(healing[item][0]);
             }
         }
-        output.println("gold: " + player.gold + " HP: " + player.HP);
     }
+
+
 }
