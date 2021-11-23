@@ -37,9 +37,6 @@ public class item // alpha 2.1
         int[] type = {0,0,0}; // used to create types of items
 
 
-        // rozkmin i skometuj matole
-
-
         for (int i = 0; i < 3; i++)
         {
             type[i] = (int) (Math.random()*3);
@@ -73,10 +70,14 @@ public class item // alpha 2.1
         STR making this die a larger one
         AG spawn additional die
         INT spawn effect
-
-
         */
 
+        generate_dices();
+    }
+
+
+    public void generate_dices()
+    {
         // base pool of dices
         ArrayList<Integer> base = new ArrayList<>();
         magic_pool = new ArrayList<>();
@@ -127,46 +128,7 @@ public class item // alpha 2.1
         AG_req = AG;
         INT_req = INT;
 
-        // base pool of dices
-        ArrayList<Integer> base = new ArrayList<>();
-        magic_pool = new ArrayList<>();
-
-
-        // we are adding randomly sized dices to the pool in a number equal to "power" of the item
-        final int len = balance.dices.length;
-        final int weak_dices =   (len / 4);
-        final int normal_dices = (len / 2);
-        //int strong_dices =
-
-        for (int i = 0; i < STR_req; i++)
-        {
-            base.add(balance.dices[(int)(Math.random() * (len - 3)) + 3]); // magic number no sadge
-        }
-
-        for (int i = 0; i < AG_req; i++)
-        {
-            base.add(balance.dices[(int)(Math.random() * weak_dices)]);
-            base.add(balance.dices[(int)(Math.random() * normal_dices)]);;
-        }
-
-        for (int i = 0; i < INT_req; i++)
-        {
-            base.add(balance.dices[(int)(Math.random() * weak_dices)]);
-            switch ((int) (Math.random()*3))
-            {
-                case 0 -> magic_pool.add(new effect(1, "edge", 2));
-                case 1 -> magic_pool.add(new effect(2, "edge", 1));
-                case 2 -> magic_pool.add(new effect(1, "random", 3));
-            }
-
-        }
-
-        // we change array list to int[]
-        base_pool = new int[base.size()];
-        for (int i = 0; i < base.size(); i++)
-        {
-            base_pool[i] = base.get(i);
-        }
+        generate_dices();
     }
 
 

@@ -24,6 +24,7 @@ public class effect // alpha 2.2
         System.out.printf("%-10s", ("power: " + power + "]"));
 
     }
+
     public String short_print()
     {
         String text = usages + " " + type + " " + power + " ";
