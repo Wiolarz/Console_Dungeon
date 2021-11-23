@@ -80,6 +80,24 @@ Quest types ideas:
                         // TODO this system is bad, day system should be remade
                     };
                 }
+                case 5 ->
+                {
+                    try
+                    {
+                        company.get(0).attack_speed -= 1;
+                        company.get(0).generate_strategy();
+                    }
+                    catch (Exception e)
+                    {
+                        output.debug("unit cannot have 0 attack_speed");
+                        company.get(0).attack_speed = 1;
+                    }
+                }
+                case 6 ->
+                {
+                    company.get(0).attack_speed += 1;
+                    company.get(0).generate_strategy();
+                }
                 case 8 -> company.get(0).cheats(); // :))
             }
         }

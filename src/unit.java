@@ -84,11 +84,14 @@ abstract class unit // alpha 2.1
     {
         // adjusting attack speed
 
+        strategy.clear();
+        magic.clear();
+
         for (int i = 0; i < attack_speed; i++)
         {
 
-            strategy.get(i).clear();
-            magic.get(i).clear();
+            strategy.add(new ArrayList<Integer>());
+            magic.add(new ArrayList<effect>());
         }
 
         int counter = 0;
