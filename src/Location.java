@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Location // Aplha 2.1
@@ -14,6 +15,9 @@ public class Location // Aplha 2.1
 
     String name;
 
+    int current_day;
+
+
     Location(int location_level)
     { // takes level of location, generates events
         id = Location.identification++; // debug
@@ -29,6 +33,69 @@ public class Location // Aplha 2.1
         density = 5; // number of events in location
         chest_chance = 3; // %(10) chest chance
         quest_enemy = 5; // %(10) chance of quest related enemy
+    }
+
+    public void enter(ArrayList<Hero> company, int day)
+    {
+        // quest related
+        current_day = day;
+        int killed = 0;
+
+        for (int i = 0; i < Balance.events; i++)
+        {
+            int event = (int)(Math.random() * 10);
+
+            if(event <= chest_chance)
+            {
+                Explore.chest(company, chest_gold);
+            }
+            else
+            {
+                if (Explore.fight(company, Explore.generate_enemy(level)))
+                {
+                    killed += level;
+                }
+            }
+        }
+
+        if (quest())
+        {
+            switch (Main.main_quest.type)
+            {
+                case "boss" -> boss(company);
+                case "monsters" -> horde(killed);
+                default -> {} // I think it should never happen
+            }
+        }
+    }
+
+    private boolean quest()
+    {
+        return Main.main_quest.target_place == id;
+    }
+
+    private void boss(ArrayList<Hero> company)
+    {
+        Manager.println("You encounter boss, his level: " + quest_level);
+
+        ArrayList<Monster> boss = new ArrayList<>();
+        boss.add(new Monster(quest_level));
+        if(Explore.fight(company, boss))
+        {
+            Main.main_quest = new Quest(current_day);
+            Main.main_quest.days_to_complete++;
+        }
+    }
+
+    private void horde(int killed)
+    {
+        Manager.println("you have defeated " + killed + " monsters");
+        Main.main_quest.monsters_to_kill -= killed;
+        if(Main.main_quest.monsters_to_kill <= 0)
+        {
+            Main.main_quest = new Quest(current_day);
+            Main.main_quest.days_to_complete++;
+        }
     }
 
     public String short_print()
