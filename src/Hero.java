@@ -167,4 +167,10 @@ public class Hero extends Unit implements Fightable // alpha 2.2
             HP = max_HP;
         }
     }
+
+    @Override
+    public int health()
+    {
+        return HP;
+    }
 }

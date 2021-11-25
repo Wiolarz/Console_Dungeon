@@ -2,62 +2,15 @@ import java.util.ArrayList;
 
 public class Explore // alpha 2.2
 {
-    private static void walk(ArrayList<Hero> company, Location place, int day)
-    { // takes
-        int killed = 0;
-        for (int i = 0; i < Balance.events; i++)
-        {
-            int event = (int)(Math.random() * 10);
-
-
-
-            if(event <= place.chest_chance)
-            {
-                Manager.println("You found a chest");
-                chest(company, place.chest_gold);
-            } else {
-                Manager.println("You fight");
-                if (fight(company, generate_enemy(place.level)))
-                {
-                    killed += place.level;
-                }
-            }
-        }
-        if (Main.main_quest.type.equals("boss") && Main.main_quest.target_place == place.id)
-        {
-            Manager.println("You encounter boss, his level: " + place.quest_level);
-
-            ArrayList<Monster> boss = new ArrayList<>();
-            boss.add(new Monster(place.quest_level));
-            if(fight(company, boss))
-            {
-                Main.main_quest = new Quest(day);
-                Main.main_quest.days_to_complete++;
-            }
-        }
-        else if (Main.main_quest.type.equals("monsters") && Main.main_quest.target_place == place.id)
-        {
-            Manager.println("you have defeated " + killed + " monsters");
-            Main.main_quest.monsters_to_kill -= killed;
-            if(Main.main_quest.monsters_to_kill <= 0)
-            {
-                Main.main_quest = new Quest(day);
-                Main.main_quest.days_to_complete++;
-            }
-        }
-
-    }
-
-
 // walking functions
 
-    private static void chest(ArrayList<Hero> company, int quality)
+    static void chest(ArrayList<Hero> company, int quality)
     { // event during exploring which rewards player
         company.get(0).gold += quality;
     }
 
 
-    private static ArrayList<Monster> generate_enemy(int level)
+    static ArrayList<Monster> generate_enemy(int level)
     {// event during exploring which challenges player
         ArrayList<Monster> enemy = new ArrayList<>();
 
@@ -163,16 +116,7 @@ public class Explore // alpha 2.2
 
     private static void turn_attacks_hero(ArrayList<Hero> company, ArrayList<Monster> enemy)
     {
-        // before player attack we remove effects from enemy
-        for (Monster fighter : enemy)
-        {
-            fighter.turn_pool = fighter.dice_pool;
-        }
-        // before player attacks we apply effects from players attack to their attacks
-        for (Hero fighter : company)
-        {
-            fighter.generate_strategy();
-        }
+        turn_reset_hero(company, enemy);
 
         for (Hero fighter : company)
         {
@@ -194,7 +138,23 @@ public class Explore // alpha 2.2
             }
         }
     }
-    private static void turn_attacks_monster(ArrayList<Monster> enemy, ArrayList<Hero> company)
+
+
+    private static void turn_reset_hero(ArrayList<Hero> company, ArrayList<Monster> enemy)
+    {
+        // before player attack we remove effects from enemy
+        for (Monster fighter : enemy)
+        {
+            fighter.turn_pool = fighter.dice_pool;
+        }
+        // before player attacks we apply effects from players attack to their attacks
+        for (Hero fighter : company)
+        {
+            fighter.generate_strategy();
+        }
+    }
+
+    private static void turn_reset_monster(ArrayList<Monster> enemy, ArrayList<Hero> company)
     {
         // before enemy attack we remove effects from players
         for (Hero fighter : company)
@@ -206,6 +166,12 @@ public class Explore // alpha 2.2
         {
             fighter.generate_strategy();
         }
+    }
+
+
+    private static void turn_attacks_monster(ArrayList<Monster> enemy, ArrayList<Hero> company)
+    {
+        turn_reset_monster(enemy, company);
 
 
         for (Monster fighter : enemy)  // monster attacks
@@ -301,7 +267,7 @@ public class Explore // alpha 2.2
         //if (choice == 1) return false; // exit world map
         if (choice > 1 && choice < world.size() + 2) // enter location
         {
-            walk(company, world.get(choice - 2), day);
+            world.get(choice - 2).enter(company, day);
             return true;
         }
         return false;
@@ -312,12 +278,10 @@ public class Explore // alpha 2.2
     static ArrayList<Location> generate_world()
     {
         ArrayList<Location> world = new ArrayList<>();
-        for (int place = 1; place < Balance.location_number+1; place++)
+        for (int place = 1; place < Balance.location_number + 1; place++)
         {
             world.add(new Location(place)); // location level
         }
         return world;
     }
-
-
 }
