@@ -6,6 +6,7 @@ public class Explore // alpha 2.2
 
     static void chest(ArrayList<Hero> company, int quality)
     { // event during exploring which rewards player
+        Manager.println("You found a chest");
         company.get(0).gold += quality;
     }
 
@@ -74,7 +75,7 @@ public class Explore // alpha 2.2
 
 // fight functions
 
-    private static int attack(ArrayList<Integer> dice_pool)
+    private static int action_attack(ArrayList<Integer> dice_pool)
     {
         int score = Unit.attack(dice_pool);
 
@@ -124,7 +125,7 @@ public class Explore // alpha 2.2
             { // here could be a choice to perform different action instead
                 int target = (int) (Math.random() * enemy.size());
 
-                int success = attack(fighter.strategy.get(action));
+                int success = action_attack(fighter.strategy.get(action));
 
                 for (int i = 0; i < success; i++)
                 {
@@ -180,7 +181,7 @@ public class Explore // alpha 2.2
             { // here could be a choice to perform different action instead
                 int target = (int)(Math.random() * company.size());
 
-                int success = attack(fighter.strategy.get(action));
+                int success = action_attack(fighter.strategy.get(action));
 
                 for (int i = 0; i < success; i++)
                 {
@@ -198,6 +199,7 @@ public class Explore // alpha 2.2
 
     static boolean fight(ArrayList<Hero> company, ArrayList<Monster> enemy)
     {
+        Manager.println("You fight");
         // measure the challenge level
         int challenge = 0;
         for (Monster fighter : enemy)

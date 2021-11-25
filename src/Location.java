@@ -37,51 +37,66 @@ public class Location // Aplha 2.1
 
     public void enter(ArrayList<Hero> company, int day)
     {
+        // quest related
         current_day = day;
         int killed = 0;
+
         for (int i = 0; i < Balance.events; i++)
         {
             int event = (int)(Math.random() * 10);
 
-
-
             if(event <= chest_chance)
             {
-                Manager.println("You found a chest");
                 Explore.chest(company, chest_gold);
-            } else {
-                Manager.println("You fight");
+            }
+            else
+            {
                 if (Explore.fight(company, Explore.generate_enemy(level)))
                 {
                     killed += level;
                 }
             }
         }
-        if (Main.main_quest.type.equals("boss") && Main.main_quest.target_place == id)
-        {
-            Manager.println("You encounter boss, his level: " + quest_level);
 
-            ArrayList<Monster> boss = new ArrayList<>();
-            boss.add(new Monster(quest_level));
-            if(Explore.fight(company, boss))
-            {
-                Main.main_quest = new Quest(day);
-                Main.main_quest.days_to_complete++;
-            }
-        }
-        else if (Main.main_quest.type.equals("monsters") && Main.main_quest.target_place == id)
+        if (quest())
         {
-            Manager.println("you have defeated " + killed + " monsters");
-            Main.main_quest.monsters_to_kill -= killed;
-            if(Main.main_quest.monsters_to_kill <= 0)
+            switch (Main.main_quest.type)
             {
-                Main.main_quest = new Quest(day);
-                Main.main_quest.days_to_complete++;
+                case "boss" -> boss(company);
+                case "monsters" -> horde(killed);
+                default -> {} // I think it should never happen
             }
         }
     }
 
+    private boolean quest()
+    {
+        return Main.main_quest.target_place == id;
+    }
 
+    private void boss(ArrayList<Hero> company)
+    {
+        Manager.println("You encounter boss, his level: " + quest_level);
+
+        ArrayList<Monster> boss = new ArrayList<>();
+        boss.add(new Monster(quest_level));
+        if(Explore.fight(company, boss))
+        {
+            Main.main_quest = new Quest(current_day);
+            Main.main_quest.days_to_complete++;
+        }
+    }
+
+    private void horde(int killed)
+    {
+        Manager.println("you have defeated " + killed + " monsters");
+        Main.main_quest.monsters_to_kill -= killed;
+        if(Main.main_quest.monsters_to_kill <= 0)
+        {
+            Main.main_quest = new Quest(current_day);
+            Main.main_quest.days_to_complete++;
+        }
+    }
 
     public String short_print()
     {
