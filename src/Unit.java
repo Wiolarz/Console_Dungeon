@@ -127,8 +127,7 @@ abstract class Unit // alpha 2.1
 
 
     public void effect(ArrayList<Integer> dices, int round)
-    {// we are making copy to avoid saving effect to an object
-
+    {
         for (Effect spell : magic.get(round))
         {
             spell.use(dices);
