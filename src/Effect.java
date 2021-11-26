@@ -42,11 +42,11 @@ public class Effect // alpha 2.2
     }
 
 
-    public void value_effect(ArrayList<Integer> dices){
-        // effect  to a target, changing it to a "type" value
+    public void value_effect(ArrayList<Integer> dices)
+    { // effect  to a target, changing it to a "type" value
         int cur_usage = usages;
-        for (int i = 0; i < dices.size() && cur_usage > 0; i++) {
-
+        for (int i = 0; i < dices.size() && cur_usage > 0; i++)
+        {
             if (dices.get(i) == Balance.dices[power])
             {
                 // effect
@@ -59,17 +59,21 @@ public class Effect // alpha 2.2
 
 
 
-    public void edge_effect(ArrayList<Integer> dices){
-        // we modify the highest values
-        for (int i = 0; i < usages; i++) {
-            try {
+    public void edge_effect(ArrayList<Integer> dices)
+    { // we modify the highest values
+        for (int i = 0; i < usages; i++)
+        {
+            try
+            {
                 // effect
                 int idx = 0;
                 int dices_idx = 0;
                 int max = dices.get(0);
 
-                for (int dice_val: dices){
-                    if (max  < dice_val){
+                for (int dice_val: dices)
+                {
+                    if (max  < dice_val)
+                    {
                         max = dice_val;
                         dices_idx = idx;
                     }
@@ -77,43 +81,50 @@ public class Effect // alpha 2.2
                 }
 
                 dices.set(dices_idx, dice_change(dices.get(dices_idx), -power));
-            } catch (Exception e){
-                //System.out.println("Cannot work with dice pool smaller than 2");;
+            }
+            catch (Exception e)
+            {
+                System.out.println("Cannot work with dice pool smaller than 2");;
             }
         }
     }
 
 
 
-    public void r_target_effect(ArrayList<Integer> dices){
+    public void r_target_effect(ArrayList<Integer> dices)
+    {
         // random dice from the pool
-        for (int i = 0; i < usages; i++) {
-                try {
-                    // effect
-                    int target = ((int) (Math.random() * (dices.size()-1)));
-                    dices.set(target, dice_change(dices.get(target), -power));
-                } catch (Exception e){
-                    //System.out.println("cannot work with dice pool smaller than 2");;
-                }
+        for (int i = 0; i < usages; i++)
+        {
+            try
+            { // effect
+                int target = ((int) (Math.random() * (dices.size()-1)));
+                dices.set(target, dice_change(dices.get(target), -power));
+            }
+            catch (Exception e){
+                System.out.println("cannot work with dice pool smaller than 2");;
             }
         }
+    }
 
 
 
         // Functions called by the effects:
 
-    static int dice_change(int dice, int value){
+    static int dice_change(int dice, int value)
+    {
         // used by other effects to change dice to another one
         int address = 0;
-        for (int d : Balance.dices){
+        for (int d : Balance.dices)
+        {
             if (d == dice)
                 break;
             
             address++;
         }
 
-        for (int i = 0; i < Math.abs(value); i++) {
-
+        for (int i = 0; i < Math.abs(value); i++)
+        {
             if (value>0)
             {
                 if (Balance.dices.length-1 == address)
@@ -130,6 +141,4 @@ public class Effect // alpha 2.2
         }
         return dice;
     }
-
-
 }
