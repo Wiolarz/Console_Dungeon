@@ -10,6 +10,12 @@ public class Explore // alpha 2.2
         company.get(0).gold += quality;
     }
 
+    static void book(ArrayList<Hero> company, int quality)
+    {  // event during exploring which rewards player
+        Manager.println("You found a book");
+        company.get(0).experience(quality);
+    }
+
 
     static ArrayList<Monster> generate_enemy(int level)
     {// event during exploring which challenges player
@@ -82,7 +88,7 @@ public class Explore // alpha 2.2
         // counting number of successes
         int success = 0;
         int difficulty = 6;
-        while (difficulty < score)
+        while (difficulty <= score)
         {
             score -= difficulty;
             difficulty = (int)(difficulty * 1.5);
@@ -93,11 +99,11 @@ public class Explore // alpha 2.2
 
     private static <X extends Unit<X>> boolean graveyard(ArrayList<X> fighters)
     {
-        for (int fighter = fighters.size() - 1; fighter >= 0; fighter--)
+        for (int index = fighters.size() - 1; index >= 0; index--)
         {
-            if (fighters.get(fighter).HP <= 0)
+            if (fighters.get(index).HP <= 0)
             {
-                fighters.remove(fighter);
+                fighters.remove(index);
             }
         }
         return fighters.size() == 0;
@@ -125,7 +131,6 @@ public class Explore // alpha 2.2
     {
         turn_reset(new ArrayList<>(attacker), new ArrayList<>(defender));
 
-
         for (X fighter : attacker)  // monster attacks
         {
             for (int action = 0; action < fighter.attack_speed; action++)
@@ -148,57 +153,70 @@ public class Explore // alpha 2.2
     }
 
 
+    private static <X extends Unit<X>> String round(ArrayList<X> attacker, ArrayList<X> defender)
+    {
+        int choice = Manager.choice();
+        switch (choice)
+        {
+            case 1 -> // escape attempt
+                    {
+                        // basic roll for each fighter, if player side succeeds
+                        //if success return false
+                        return "escape";
+                    }
+
+            case 2 -> {
+                // player attacks
+                // random targets for now
+                turn_attacks(new ArrayList<>(attacker), new ArrayList<>(defender));
+
+                // checking dead enemy
+                if (graveyard(new ArrayList<>(defender)))
+                {
+                    return "end";
+                }
+            }
+        }
+        return "nothing";
+    }
+
+
+
     static boolean fight(ArrayList<Hero> company, ArrayList<Monster> enemy)
     {
-        Manager.println("You fight");
-        // measure the challenge level
-        int challenge = 0;
+        Manager.println("You fight"); //enemy.get(0).printing_all_stats();
+        int challenge = 0; // measure the challenge level
         for (Monster fighter : enemy)
         {
             challenge += fighter.level;
         }
 
-        //enemy.get(0).printing_all_stats();
-
         // fighting
-
+        String score;
         for (int rounds = 1; rounds < 50; rounds++)
         {
-            int choice = Manager.choice("");
+            // player attack
+            score = round(new ArrayList<>(company), new ArrayList<>(enemy));
+            if (score.equals("end"))
+                break;
+            else if (score.equals("escape"))
+                return false;
 
-            switch (choice)
-            {
-                case 1 -> // escape attempt
-                {
-                    // basic roll for each fighter, if player side succeeds
-                    //if success return false
-                    return false;
-                }
+            // enemy attack
+            score = round(new ArrayList<>(enemy), new ArrayList<>(company));
+            if (score.equals("end"))
+                break;
+            else if (score.equals("escape"))
+                return false;
+        }
 
-                case 2 ->
-                {
-                    // player attacks
-                    // random targets for now
-                    turn_attacks(new ArrayList<>(company), new ArrayList<>(enemy));
-
-                    // checking dead enemy
-                    if (graveyard(new ArrayList<>(enemy)))
-                    {
-                        Manager.println("You have won this fight");
-                        company.get(0).experience(challenge);
-                        return true;
-                    }
-                }
-            }
-
-            turn_attacks(new ArrayList<>(enemy), new ArrayList<>(company));
-
-            // checking dead in company
-            if (graveyard(new ArrayList<>(company)))
-            {
-                Manager.exit("Your company has been defeated GAME OVER", "fight");
-            }
-
+        if (company.size() == 0)
+            Manager.exit("Your company has been defeated GAME OVER", "fight");
+        else if (enemy.size() == 0)
+        {
+            Manager.println("You have won this fight");
+            company.get(0).experience(challenge);
+            return true;
         }
         return false; // a draw
     }
@@ -214,7 +232,7 @@ public class Explore // alpha 2.2
             Manager.print(x + " " + place.short_print() + " ");
             x++;
         }
-        int choice = Manager.choice("");  // User input
+        int choice = Manager.choice();  // User input
         // END
 
         //if (choice == 1) return false; // exit world map

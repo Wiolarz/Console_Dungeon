@@ -111,10 +111,19 @@ public class Manager
         System.out.println();
     }
 
+    static int choice()
+    {
+    return input();
+    }
 
     static int choice(String txt)
     {
         System.out.println(txt);
+        return input();
+    }
+
+    private static int input()
+    {
         Scanner keyboard = new Scanner(System.in);
         int input;
         try

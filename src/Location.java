@@ -43,18 +43,14 @@ public class Location // Aplha 2.1
 
         for (int i = 0; i < Balance.events; i++)
         {
-            int event = (int)(Math.random() * 10);
-
-            if(event <= chest_chance)
+            if (Explore.fight(company, Explore.generate_enemy(level)))
             {
-                Explore.chest(company, chest_gold);
-            }
-            else
-            {
-                if (Explore.fight(company, Explore.generate_enemy(level)))
-                {
-                    killed += level;
-                }
+                killed += level;
+                int event = (int)(Math.random() * 2);
+                if (event == 1) // 50% chance
+                    Explore.chest(company, chest_gold);
+                else
+                    Explore.book(company, chest_gold);
             }
         }
 
