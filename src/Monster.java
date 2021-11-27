@@ -1,4 +1,4 @@
-public class Monster extends Unit implements Fightable // alpha 2.2
+public class Monster extends Unit<Unit>// alpha 2.2
 {
     int level;
 
@@ -35,11 +35,5 @@ public class Monster extends Unit implements Fightable // alpha 2.2
 
         max_HP = power;
         HP = max_HP;
-    }
-
-    @Override
-    public int health()
-    {
-        return HP;
     }
 }

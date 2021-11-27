@@ -43,7 +43,15 @@ public class Manager
     }
 
 
+    static void printf(String format, String txt)
+    {
+        System.out.printf(format, txt);
+    }
 
+    static void println()
+    {
+        System.out.println();
+    }
 
     static void println(String txt)
     {
@@ -52,7 +60,7 @@ public class Manager
 
     static void print(String txt)
     {
-        System.out.print(txt + " ");
+        System.out.print(txt);
     }
 
 

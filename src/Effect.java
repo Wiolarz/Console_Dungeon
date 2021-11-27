@@ -18,16 +18,16 @@ public class Effect // alpha 2.2
 
     public void print()
     {
-        System.out.print("[");
-        System.out.printf("%-10s", ("usages: " + usages));
-        System.out.printf("%-12s", ("type: " + type));
-        System.out.printf("%-10s", ("power: " + power + "]"));
+        Manager.print("[");
+        Manager.printf("%-10s", ("usages: " + usages));
+        Manager.printf("%-12s", ("type: " + type));
+        Manager.printf("%-10s", ("power: " + power + "]"));
 
     }
 
     public String short_print()
     {
-        return usages + " " + type + " " + power + " ";
+        return usages + " " + type + " " + power;
     }
 
 
@@ -84,7 +84,7 @@ public class Effect // alpha 2.2
             }
             catch (Exception e)
             {
-                System.out.println("Cannot work with dice pool smaller than 2");;
+                Manager.println("Cannot work with dice pool smaller than 2");;
             }
         }
     }
@@ -102,7 +102,7 @@ public class Effect // alpha 2.2
                 dices.set(target, dice_change(dices.get(target), -power));
             }
             catch (Exception e){
-                System.out.println("cannot work with dice pool smaller than 2");;
+                Manager.println("cannot work with dice pool smaller than 2");;
             }
         }
     }

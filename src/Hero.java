@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Hero extends Unit implements Fightable // alpha 2.2
+public class Hero extends Unit<Unit>// alpha 2.2
 {
     int level = 1;
     int exp = 0;
@@ -82,7 +82,7 @@ public class Hero extends Unit implements Fightable // alpha 2.2
             gold -= price;
             return true;
         } else
-            System.out.println("not enough money " + (price-gold) + " needed");
+            Manager.println("not enough money " + (price-gold) + " needed");
             return false;
     }
 
@@ -138,26 +138,11 @@ public class Hero extends Unit implements Fightable // alpha 2.2
 
 
 
-    @Override
     public void printing_all_stats()
     {
+        super.printing_all_stats();
         // we add hero specific values
-        System.out.println("STR: " + STR + " AG: " + AG + " INT: " + INT);
-        System.out.println("HP: " + HP + " MAX_HP: " + max_HP);
-        System.out.println("Item base: " + dice_pool);
-        System.out.println("Strategy: " + strategy);
-        System.out.print("MAGIC: ");
-        for (ArrayList<Effect> spell_list : magic)
-        {
-            Manager.print("[");
-            for (Effect spell : spell_list)
-            {
-                Manager.print(spell.short_print());
-            }
-            Manager.print("] ");
-        }
-        System.out.println();
-        System.out.println("Gold: " + gold + " Level: " + level + " Exp: " + exp);
+        Manager.println("Gold: " + gold + " Level: " + level + " Exp: " + exp);
     }
 
     public void heal(int value)
@@ -166,11 +151,5 @@ public class Hero extends Unit implements Fightable // alpha 2.2
         if (HP > max_HP){
             HP = max_HP;
         }
-    }
-
-    @Override
-    public int health()
-    {
-        return HP;
     }
 }

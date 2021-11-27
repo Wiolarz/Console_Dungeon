@@ -134,7 +134,7 @@ public class Item // alpha 2.1
 
 
 
-    public boolean Does_Fit(Unit UNIT)
+    public boolean Does_Fit(Unit<Unit> UNIT)
     {
         return (UNIT.STR >= STR_req) && (UNIT.AG >= AG_req) && (UNIT.INT >= INT_req);
     }
@@ -142,16 +142,16 @@ public class Item // alpha 2.1
 
     public void print_item()
     {
-        System.out.println("STR " + STR_req + " AG " + AG_req + " INT " + INT_req);
+        Manager.println("STR " + STR_req + " AG " + AG_req + " INT " + INT_req);
         for(int i : base_pool)
         {
-            System.out.print(i + " ");
+            Manager.print(i + " ");
         }
-        System.out.println();
+        Manager.println();
         for(Effect spell : magic_pool)
         {
             spell.print();
         }
-        System.out.println();
+        Manager.println();
     }
 }

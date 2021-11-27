@@ -91,7 +91,7 @@ public class Explore // alpha 2.2
         return success;
     }
 
-    private static boolean graveyard_hero(ArrayList<Hero> fighters)
+    private static <X extends Unit<X>> boolean graveyard(ArrayList<X> fighters)
     {
         for (int fighter = fighters.size() - 1; fighter >= 0; fighter--)
         {
@@ -103,94 +103,45 @@ public class Explore // alpha 2.2
         return fighters.size() == 0;
     }
 
-    private static boolean graveyard_monster(ArrayList<Monster> fighters)
+
+
+    private static <X extends Unit<X>> void turn_reset(ArrayList<X> attacker, ArrayList<X> defender)
     {
-        for (int fighter = fighters.size() - 1; fighter >= 0; fighter--)
-        {
-            if (fighters.get(fighter).HP <= 0)
-            {
-                fighters.remove(fighter);
-            }
-        }
-        return fighters.size() == 0;
-    }
-
-    private static void turn_attacks_hero(ArrayList<Hero> company, ArrayList<Monster> enemy)
-    {
-        turn_reset_hero(company, enemy);
-
-        for (Hero fighter : company)
-        {
-            for (int action = 0; action < fighter.attack_speed; action++)
-            { // here could be a choice to perform different action instead
-                int target = (int) (Math.random() * enemy.size());
-
-                int success = action_attack(fighter.strategy.get(action));
-
-                for (int i = 0; i < success; i++)
-                {
-                    enemy.get(target).HP -= 1;
-                }
-
-                if (success > 0)
-                {
-                    fighter.effect(enemy.get(target).turn_pool, action);
-                }
-            }
-        }
-    }
-
-
-    private static void turn_reset_hero(ArrayList<Hero> company, ArrayList<Monster> enemy)
-    {
-        // before player attack we remove effects from enemy
-        for (Monster fighter : enemy)
+        // before attack we remove effects from defender
+        for (X fighter : defender)
         {
             fighter.turn_pool = fighter.dice_pool;
         }
         // before player attacks we apply effects from players attack to their attacks
-        for (Hero fighter : company)
-        {
-            fighter.generate_strategy();
-        }
-    }
-
-    private static void turn_reset_monster(ArrayList<Monster> enemy, ArrayList<Hero> company)
-    {
-        // before enemy attack we remove effects from players
-        for (Hero fighter : company)
-        {
-            fighter.turn_pool = fighter.dice_pool;
-        }
-        // before enemy attack we aplly effects from players attack to their attacks
-        for (Monster fighter : enemy)
+        for (X fighter : attacker)
         {
             fighter.generate_strategy();
         }
     }
 
 
-    private static void turn_attacks_monster(ArrayList<Monster> enemy, ArrayList<Hero> company)
+
+    private static <X extends Unit<X>> void turn_attacks(ArrayList<X> attacker, ArrayList<X> defender)
     {
-        turn_reset_monster(enemy, company);
+        turn_reset(new ArrayList<>(attacker), new ArrayList<>(defender));
 
 
-        for (Monster fighter : enemy)  // monster attacks
+        for (X fighter : attacker)  // monster attacks
         {
             for (int action = 0; action < fighter.attack_speed; action++)
             { // here could be a choice to perform different action instead
-                int target = (int)(Math.random() * company.size());
+                int target = (int)(Math.random() * defender.size());
 
                 int success = action_attack(fighter.strategy.get(action));
 
                 for (int i = 0; i < success; i++)
                 {
-                    company.get(target).HP -= 1;
+                    defender.get(target).HP -= 1;
                 }
 
                 if (success > 0)
                 {
-                    fighter.effect(company.get(target).turn_pool, action);
+                    fighter.effect(defender.get(target).turn_pool, action);
                 }
             }
         }
@@ -228,10 +179,10 @@ public class Explore // alpha 2.2
                 {
                     // player attacks
                     // random targets for now
-                    turn_attacks_hero(company, enemy);
+                    turn_attacks(new ArrayList<>(company), new ArrayList<>(enemy));
 
                     // checking dead enemy
-                    if (graveyard_monster(enemy))
+                    if (graveyard(new ArrayList<>(enemy)))
                     {
                         Manager.println("You have won this fight");
                         company.get(0).experience(challenge);
@@ -240,10 +191,10 @@ public class Explore // alpha 2.2
                 }
             }
 
-            turn_attacks_monster(enemy, company);
+            turn_attacks(new ArrayList<>(enemy), new ArrayList<>(company));
 
             // checking dead in company
-            if (graveyard_hero(company))
+            if (graveyard(new ArrayList<>(company)))
             {
                 Manager.exit("Your company has been defeated GAME OVER", "fight");
             }
