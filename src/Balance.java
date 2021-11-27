@@ -53,7 +53,7 @@ public class Balance // alpha 2.1
         for (int i = 1; i <= (dices[dices.length-1]) / 2; i++)
         {
             groups.add(new ArrayList<>());
-            System.out.print(i + " ");
+            Manager.print(i + " ");
             for (int dice : Balance.dices)
             {
                 if (dice % i == 0)
@@ -61,7 +61,7 @@ public class Balance // alpha 2.1
                     groups.get(i-1).add(dice);
                 }
             }
-            System.out.println(groups.get(i-1));
+            Manager.println(groups.get(i-1));
         }
         ArrayList<Integer> existing = new ArrayList<>();
         ArrayList<ArrayList<Integer>> fin = new ArrayList<>(groups.size()-1);
@@ -91,9 +91,9 @@ public class Balance // alpha 2.1
                 existing.add(dice);
             }
 
-            System.out.println(fin.get(i-1));
+            Manager.println(fin.get(i-1));
         }
-        System.out.println(fin);
+        Manager.println(fin);
 
     }*/
 }

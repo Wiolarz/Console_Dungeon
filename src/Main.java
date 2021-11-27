@@ -1,10 +1,8 @@
 import java.util.ArrayList;
 
-public class Main // alpha 2.5 Game_manager Wiolarz
+public class Main // alpha 2.6 advanced location system introduction of polymorphism
 {
 /*
-Every file except for balance
-removal of output and input --> all of those functions will go to a new class "manager.java"
 
 */
 
@@ -60,7 +58,8 @@ removal of output and input --> all of those functions will go to a new class "m
             switch (choice){
                 case 1 -> company.get(0).printing_all_stats(); // info
                 case 2 -> Economy.shop(company.get(0), item_list); // shop
-                case 3 -> {
+                case 3 ->
+                {
                     if(Explore.walking(company, world, days))
                     {
 
@@ -68,7 +67,7 @@ removal of output and input --> all of those functions will go to a new class "m
                     else
                     {
                         choice = 0; // player didn't explore anything
-                        // TODO this system is bad, day system should be remade
+                        // TODO day system should be remade
                     };
                 }
                 case 5 ->
@@ -104,11 +103,11 @@ removal of output and input --> all of those functions will go to a new class "m
     {
         Manager.debug("Start");
 
-        //System.out.println(tester.location_creation());
-        //System.out.println(tester.quest_creator());
+        //Manager.println(tester.location_creation());
+        //Manager.println(tester.quest_creator());
 
 
-        //System.out.println(tester.monster_generation());
+        //Manager.println(tester.monster_generation());
 
         // player creation
         Hero player = new Hero();

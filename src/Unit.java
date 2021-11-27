@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-abstract class Unit // alpha 2.1
+abstract class Unit<X extends Unit> // alpha 2.1
 {
     int STR; // STRENGTH number of sides in bonus dices
     int AG;  // AGILITY number of additional dices
@@ -40,9 +40,6 @@ abstract class Unit // alpha 2.1
 
 
 
-
-
-
     public void item_change(Item thing)
     {
         dice_pool.clear();
@@ -74,9 +71,6 @@ abstract class Unit // alpha 2.1
 
         generate_strategy(); // adding new dices to the strategy
     }
-
-
-
 
 
 
@@ -121,11 +115,6 @@ abstract class Unit // alpha 2.1
     }
 
 
-
-    // temp place for effect
-
-
-
     public void effect(ArrayList<Integer> dices, int round)
     {
         for (Effect spell : magic.get(round))
@@ -158,11 +147,24 @@ abstract class Unit // alpha 2.1
         Manager.print("Magic: ");
         for (ArrayList<Effect> spell_list : magic)
         {
+            Manager.print("[");
+            ArrayList<String> names = new ArrayList<>();
             for (Effect spell : spell_list)
             {
-                Manager.print(spell.short_print());
+                names.add(spell.short_print());
             }
+            int index = 0;
+            while (names.size() > 1)
+            {
+                Manager.print(names.get(index) + " | ");
+                names.remove(index);
+            }
+            if (names.size() == 1) // printing last element
+            {
+                Manager.print(names.get(0));
+            }
+            Manager.print( "] ");
         }
-        Manager.println("");
+        Manager.println();
     }
 }
