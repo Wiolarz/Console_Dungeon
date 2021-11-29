@@ -1,19 +1,27 @@
+package Technical;
+
+
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Gameplay.*;
+import Objects.*;
+
+
 public class Manager
 {
-    static void debug(String txt)
+    public static void debug(String txt)
     {
         System.out.println(txt);
     }
 
-    static void error(String txt)
+    public static void error(String txt)
     {
         System.out.println(txt);
     }
 
-    static String roman_numbers(int value)
+    public static String roman_numbers(int value)
     {     // Conversion of int into a roman number (works correctly to a max number of 39)
         StringBuilder result = new StringBuilder();
         String x;
@@ -43,28 +51,28 @@ public class Manager
     }
 
 
-    static void printf(String format, String txt)
+    public static void printf(String format, String txt)
     {
         System.out.printf(format, txt);
     }
 
-    static void println()
+    public static void println()
     {
         System.out.println();
     }
 
-    static void println(String txt)
+    public static void println(String txt)
     {
         System.out.println(txt);
     }
 
-    static void print(String txt)
+    public static void print(String txt)
     {
         System.out.print(txt);
     }
 
 
-    static void shop(int folders_number)
+    public static void shop(int folders_number)
     {
         System.out.println("Welcome to shop 1 exit; 2 medic's shop;");
 
@@ -75,7 +83,7 @@ public class Manager
         System.out.println();
     }
 
-    static void shop_folder(ArrayList<Item> folder)
+    public static void shop_folder(ArrayList<Item> folder)
     {
         System.out.println("Welcome to shop 1 exit; ");
         int x = -1;
@@ -100,7 +108,7 @@ public class Manager
         }
     }
 
-    static void medic(int[][] healing)
+    public static void medic(int[][] healing)
     {
         System.out.print("Welcome to medic's shop 1 exit  2 max_heal  3 auto_heal  ");
         int x = 4;
@@ -111,12 +119,12 @@ public class Manager
         System.out.println();
     }
 
-    static int choice()
+    public static int choice()
     {
     return input();
     }
 
-    static int choice(String txt)
+    public static int choice(String txt)
     {
         System.out.println(txt);
         return input();
@@ -143,7 +151,7 @@ public class Manager
 
 
 
-    static void exit(String txt, String type)
+    public static void exit(String txt, String type)
     {
         System.out.println(txt);
 

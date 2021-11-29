@@ -1,23 +1,28 @@
+package Gameplay;
+
+import Objects.*;
+import Technical.*;
+
 import java.util.ArrayList;
 
 public class Explore // alpha 2.2
 {
 // walking functions
 
-    static void chest(ArrayList<Hero> company, int quality)
+    public static void chest(ArrayList<Hero> company, int quality)
     { // event during exploring which rewards player
         Manager.println("You found a chest");
         company.get(0).gold += quality;
     }
 
-    static void book(ArrayList<Hero> company, int quality)
+    public static void book(ArrayList<Hero> company, int quality)
     {  // event during exploring which rewards player
         Manager.println("You found a book");
         company.get(0).experience(quality);
     }
 
 
-    static ArrayList<Monster> generate_enemy(int level)
+    public static ArrayList<Monster> generate_enemy(int level)
     {// event during exploring which challenges player
         ArrayList<Monster> enemy = new ArrayList<>();
 
@@ -182,7 +187,7 @@ public class Explore // alpha 2.2
 
 
 
-    static boolean fight(ArrayList<Hero> company, ArrayList<Monster> enemy)
+    public static boolean fight(ArrayList<Hero> company, ArrayList<Monster> enemy)
     {
         Manager.println("You fight"); //enemy.get(0).printing_all_stats();
         int challenge = 0; // measure the challenge level

@@ -1,8 +1,13 @@
+package Objects;
+
+import Gameplay.*;
+import Technical.*;
+
 public class Quest
 {
     // basic complexity
 
-    int days_to_complete;
+    public int days_to_complete;
     int target_place;
 
 
@@ -13,9 +18,9 @@ public class Quest
     String type;
 
     String story;
-    String fail_story;
+    public String fail_story;
 
-    Quest(int current_day)
+    public Quest(int current_day)
     {
         random_quest(current_day);
     }

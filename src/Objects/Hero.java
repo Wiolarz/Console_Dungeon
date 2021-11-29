@@ -1,10 +1,14 @@
+package Objects;
+
 import java.util.ArrayList;
+import Gameplay.*;
+import Technical.*;
 
 public class Hero extends Unit<Unit>// alpha 2.2
 {
     int level = 1;
     int exp = 0;
-    int gold = 0;
+    public int gold = 0;
 
     static Hero generate() // not used
     {
@@ -12,7 +16,7 @@ public class Hero extends Unit<Unit>// alpha 2.2
         return dude;
     }
 
-    Hero()
+    public Hero()
     {
         create_hero();
     }
@@ -45,7 +49,7 @@ public class Hero extends Unit<Unit>// alpha 2.2
         gold = 10;
     }
 
-    static Hero create_mercenary(int power)
+    public static Hero create_mercenary(int power)
     {
         Hero mercenary = new Hero();
         int[] knight = {3, 2, 1};

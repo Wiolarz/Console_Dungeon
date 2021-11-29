@@ -1,18 +1,22 @@
+package Objects;
+
 import java.util.ArrayList;
+import Gameplay.*;
+import Technical.*;
 
 public class Item // alpha 2.1
 {
-    int[] base_pool;
-    ArrayList<Effect> magic_pool;
+    public int[] base_pool;
+    public ArrayList<Effect> magic_pool;
     // those are stats bonuses
-    int STR_req;
-    int AG_req;
-    int INT_req;
+    public int STR_req;
+    public int AG_req;
+    public int INT_req;
 
-    int level;
+    public int level;
 
 
-    Item(int power) // String type,
+    public Item(int power) // String type,
     {
         /*switch (type)
         {

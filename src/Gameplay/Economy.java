@@ -1,3 +1,8 @@
+package Gameplay;
+
+import Objects.*;
+import Technical.*;
+
 import java.util.ArrayList;
 
 public class Economy // alpha 2.1
@@ -58,7 +63,7 @@ public class Economy // alpha 2.1
         int choice = 0;
         while (choice != 9)
         {
-            choice = Manager.choice("");
+            choice = Manager.choice();
 
             if (choice == 1) return;
             else if (choice > 1 && folder.get(choice - 2).Does_Fit(player))
@@ -135,7 +140,7 @@ public class Economy // alpha 2.1
     }
 
 
-    static void autoHeal(Hero player, int[][] healing)
+    public static void autoHeal(Hero player, int[][] healing)
     {
         for (int item = healing.length - 1; item >= 0; item--)
         {
