@@ -1,10 +1,14 @@
+package Objects;
+
 import java.util.ArrayList;
 import java.util.Objects;
+import Gameplay.*;
+import Technical.*;
 
 public class Location // Aplha 2.1
 {
     static int identification = 0;
-    int id;
+    public int id;
 
     int level; // level of things inside the location
     int density; // number of events present
@@ -18,7 +22,7 @@ public class Location // Aplha 2.1
     int current_day;
 
 
-    Location(int location_level)
+    public Location(int location_level)
     { // takes level of location, generates events
         id = Location.identification++; // debug
 

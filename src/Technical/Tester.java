@@ -1,3 +1,8 @@
+package Technical;
+
+import Gameplay.*;
+import Objects.*;
+
 public class Tester // 2.2
 {
     static boolean quest_creator()
@@ -138,6 +143,11 @@ public class Tester // 2.2
         }
     }
 
+
+    public static void main(String[] args)
+    {
+        // Run tests
+    }
 
 
 

@@ -1,3 +1,8 @@
+package Gameplay;
+
+import Objects.*;
+import Technical.*;
+
 import java.util.ArrayList;
 
 public class Main // alpha 2.6 advanced location system introduction of polymorphism
@@ -103,11 +108,6 @@ public class Main // alpha 2.6 advanced location system introduction of polymorp
     {
         Manager.debug("Start");
 
-        //Manager.println(tester.location_creation());
-        //Manager.println(tester.quest_creator());
-
-
-        //Manager.println(tester.monster_generation());
 
         // player creation
         Hero player = new Hero();

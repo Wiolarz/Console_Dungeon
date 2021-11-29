@@ -1,4 +1,8 @@
+package Objects;
+
 import java.util.ArrayList;
+import Gameplay.*;
+import Technical.*;
 
 public class Effect // alpha 2.2
 {

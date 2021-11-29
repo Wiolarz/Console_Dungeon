@@ -1,4 +1,9 @@
+package Technical;
+
 import java.util.ArrayList;
+import Gameplay.*;
+import Objects.*;
+
 
 public class Balance // alpha 2.1
 {
@@ -53,15 +58,15 @@ public class Balance // alpha 2.1
         for (int i = 1; i <= (dices[dices.length-1]) / 2; i++)
         {
             groups.add(new ArrayList<>());
-            Manager.print(i + " ");
-            for (int dice : Balance.dices)
+            Technical.Manager.print(i + " ");
+            for (int dice : Technical.Balance.dices)
             {
                 if (dice % i == 0)
                 {
                     groups.get(i-1).add(dice);
                 }
             }
-            Manager.println(groups.get(i-1));
+            Technical.Manager.println(groups.get(i-1));
         }
         ArrayList<Integer> existing = new ArrayList<>();
         ArrayList<ArrayList<Integer>> fin = new ArrayList<>(groups.size()-1);
@@ -91,9 +96,9 @@ public class Balance // alpha 2.1
                 existing.add(dice);
             }
 
-            Manager.println(fin.get(i-1));
+            Technical.Manager.println(fin.get(i-1));
         }
-        Manager.println(fin);
+        Technical.Manager.println(fin);
 
     }*/
 }

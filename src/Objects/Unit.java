@@ -1,23 +1,27 @@
-import java.util.ArrayList;
+package Objects;
 
-abstract class Unit<X extends Unit> // alpha 2.1
+import java.util.ArrayList;
+import Gameplay.*;
+import Technical.*;
+
+public abstract class Unit<X extends Unit> // alpha 2.1
 {
     int STR; // STRENGTH number of sides in bonus dices
     int AG;  // AGILITY number of additional dices
     int INT; // INTELLIGENCE number of additional effects
 
     public int HP;  // health points
-    int max_HP;
+    public int max_HP;
 
-    Item artefact;  // only one object item can be assigned to a Unit
+    Item artefact;  // only one object item can be assigned to a Objects.Unit
 
-    ArrayList<Integer> dice_pool = new ArrayList<>();  // full list of dices used to generate strategy
-    ArrayList<Integer> turn_pool = new ArrayList<>();
+    public ArrayList<Integer> dice_pool = new ArrayList<>();  // full list of dices used to generate strategy
+    public ArrayList<Integer> turn_pool = new ArrayList<>();
 
 
-    ArrayList<ArrayList<Integer>> strategy;  // lists of dices used for fighting
+    public ArrayList<ArrayList<Integer>> strategy;  // lists of dices used for fighting
 
-    int attack_speed; // number of lists in strategy
+    public int attack_speed; // number of lists in strategy
 
 
 
@@ -26,8 +30,8 @@ abstract class Unit<X extends Unit> // alpha 2.1
     ArrayList<ArrayList<Effect>> magic;  // 3 lists of effects used for fighting
 
     Unit()
-    {// this works before Hero()
-        attack_speed = 1; // every Unit has at least 1 attack
+    {// this works before Objects.Hero()
+        attack_speed = 1; // every Objects.Unit has at least 1 attack
 
         strategy = new ArrayList<>(attack_speed);
         magic = new ArrayList<>(attack_speed);
@@ -126,7 +130,7 @@ abstract class Unit<X extends Unit> // alpha 2.1
 
 
 
-    static int attack(ArrayList<Integer> dices)
+    public static int attack(ArrayList<Integer> dices)
     {
         int value = 0;
         for (int i = 0; i < dices.size(); i++)
@@ -139,10 +143,10 @@ abstract class Unit<X extends Unit> // alpha 2.1
 
 
     public void printing_all_stats()
-    { // we print every Unit value
+    { // we print every Objects.Unit value
         Manager.println("STR: " + STR + " AG: " + AG + " INT: " + INT);
         Manager.println("HP: " + HP + " MAX_HP: " + max_HP);
-        Manager.println("Item base: " + dice_pool);
+        Manager.println("Objects.Item base: " + dice_pool);
         Manager.println("Strategy: " + strategy);
         Manager.print("Magic: ");
         for (ArrayList<Effect> spell_list : magic)

@@ -1,23 +1,28 @@
+package Gameplay;
+
+import Objects.*;
+import Technical.*;
+
 import java.util.ArrayList;
 
 public class Explore // alpha 2.2
 {
 // walking functions
 
-    static void chest(ArrayList<Hero> company, int quality)
+    public static void chest(ArrayList<Hero> company, int quality)
     { // event during exploring which rewards player
         Manager.println("You found a chest");
         company.get(0).gold += quality;
     }
 
-    static void book(ArrayList<Hero> company, int quality)
+    public static void book(ArrayList<Hero> company, int quality)
     {  // event during exploring which rewards player
         Manager.println("You found a book");
         company.get(0).experience(quality);
     }
 
 
-    static ArrayList<Monster> generate_enemy(int level)
+    public static ArrayList<Monster> generate_enemy(int level)
     {// event during exploring which challenges player
         ArrayList<Monster> enemy = new ArrayList<>();
 
@@ -97,7 +102,7 @@ public class Explore // alpha 2.2
         return success;
     }
 
-    private static <X extends Unit<X>> boolean graveyard(ArrayList<X> fighters)
+    private static <X extends Unit<X>> ArrayList<X> graveyard(ArrayList<X> fighters)
     {
         for (int index = fighters.size() - 1; index >= 0; index--)
         {
@@ -106,7 +111,7 @@ public class Explore // alpha 2.2
                 fighters.remove(index);
             }
         }
-        return fighters.size() == 0;
+        return fighters;
     }
 
 
@@ -171,7 +176,8 @@ public class Explore // alpha 2.2
                 turn_attacks(new ArrayList<>(attacker), new ArrayList<>(defender));
 
                 // checking dead enemy
-                if (graveyard(new ArrayList<>(defender)))
+                defender = graveyard(new ArrayList<>(defender));
+                if (defender.size() == 0)
                 {
                     return "end";
                 }
@@ -182,7 +188,7 @@ public class Explore // alpha 2.2
 
 
 
-    static boolean fight(ArrayList<Hero> company, ArrayList<Monster> enemy)
+    public static boolean fight(ArrayList<Hero> company, ArrayList<Monster> enemy)
     {
         Manager.println("You fight"); //enemy.get(0).printing_all_stats();
         int challenge = 0; // measure the challenge level
@@ -198,26 +204,25 @@ public class Explore // alpha 2.2
             // player attack
             score = round(new ArrayList<>(company), new ArrayList<>(enemy));
             if (score.equals("end"))
-                break;
+            {
+                Manager.println("You have won this fight");
+                company.get(0).experience(challenge);
+                return true;
+            }
             else if (score.equals("escape"))
                 return false;
 
             // enemy attack
             score = round(new ArrayList<>(enemy), new ArrayList<>(company));
             if (score.equals("end"))
-                break;
-            else if (score.equals("escape"))
+            {
+                Manager.exit("Your company has been defeated GAME OVER", "fight");
+            }
+            else if (score.equals("escape")) // if enemy would be able to escape, we should change boolean system to a
+                //String one
                 return false;
         }
 
-        if (company.size() == 0)
-            Manager.exit("Your company has been defeated GAME OVER", "fight");
-        else if (enemy.size() == 0)
-        {
-            Manager.println("You have won this fight");
-            company.get(0).experience(challenge);
-            return true;
-        }
         return false; // a draw
     }
 
