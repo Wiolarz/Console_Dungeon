@@ -1,7 +1,5 @@
 public class Monster extends Unit<Unit>// alpha 2.2
 {
-    int level;
-
     Monster(int power)
     {
         create_moster(power);

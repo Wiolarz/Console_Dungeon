@@ -6,6 +6,8 @@ abstract class Unit<X extends Unit> // alpha 2.1
     int AG;  // AGILITY number of additional dices
     int INT; // INTELLIGENCE number of additional effects
 
+    int level;
+
     public int HP;  // health points
     int max_HP;
 
