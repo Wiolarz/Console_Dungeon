@@ -10,14 +10,14 @@ public class Balance // alpha 2.1
     // set of dices used in a game, its number should not be smaller than 1
     // length min(2) else effects will not work
     // sorted else effects will not work
-    public static int[] dices = {4, 6, 8, 10, 12, 20}; //4, 6, 8, 10, 12, 20
+    public static int[] dice = {4, 6, 8, 10, 12, 20}; //4, 6, 8, 10, 12, 20
 
-    // max player stats = dices.length
-    public static int max_power = dices.length * 3;
+    // max player stats = dice.length
+    public static int max_power = dice.length * 3;
 
 
 
-    public static int smallest_dice_value = 1;
+    public static int smallest_die_value = 1;
 
     // main balance values to create gameplay
     public static int powerful = 7;
