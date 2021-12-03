@@ -74,11 +74,11 @@ public class Effect // alpha 2.2
                 int dice_idx = 0;
                 int max = dice.get(0);
 
-                for (int die_val: dice)
+                for (int die: dice)
                 {
-                    if (max  < die_val)
+                    if (max  < die)
                     {
-                        max = die_val;
+                        max = die;
                         dice_idx = idx;
                     }
                     idx++;
