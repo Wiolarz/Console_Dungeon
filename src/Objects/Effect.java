@@ -35,26 +35,26 @@ public class Effect // alpha 2.2
     }
 
 
-    public void use(ArrayList<Integer> dices)
+    public void use(ArrayList<Integer> dice)
     {
         switch (type)
         {
-            case "value" -> value_effect(dices);
-            case "edge" -> edge_effect(dices);
-            case "random" -> r_target_effect(dices);
+            case "value" -> value_effect(dice);
+            case "edge" -> edge_effect(dice);
+            case "random" -> r_target_effect(dice);
         }
     }
 
 
-    public void value_effect(ArrayList<Integer> dices)
+    public void value_effect(ArrayList<Integer> dice)
     { // effect  to a target, changing it to a "type" value
         int cur_usage = usages;
-        for (int i = 0; i < dices.size() && cur_usage > 0; i++)
+        for (int i = 0; i < dice.size() && cur_usage > 0; i++)
         {
-            if (dices.get(i) == Balance.dices[power])
+            if (dice.get(i) == Balance.dice[power])
             {
                 // effect
-                dices.set(i, Balance.smallest_dice_value);
+                dice.set(i, Balance.smallest_die_value);
 
                 cur_usage--;
             }
@@ -63,7 +63,7 @@ public class Effect // alpha 2.2
 
 
 
-    public void edge_effect(ArrayList<Integer> dices)
+    public void edge_effect(ArrayList<Integer> dice)
     { // we modify the highest values
         for (int i = 0; i < usages; i++)
         {
@@ -71,20 +71,20 @@ public class Effect // alpha 2.2
             {
                 // effect
                 int idx = 0;
-                int dices_idx = 0;
-                int max = dices.get(0);
+                int dice_idx = 0;
+                int max = dice.get(0);
 
-                for (int dice_val: dices)
+                for (int die: dice)
                 {
-                    if (max  < dice_val)
+                    if (max  < die)
                     {
-                        max = dice_val;
-                        dices_idx = idx;
+                        max = die;
+                        dice_idx = idx;
                     }
                     idx++;
                 }
 
-                dices.set(dices_idx, dice_change(dices.get(dices_idx), -power));
+                dice.set(dice_idx, die_change(dice.get(dice_idx), -power));
             }
             catch (Exception e)
             {
@@ -95,15 +95,15 @@ public class Effect // alpha 2.2
 
 
 
-    public void r_target_effect(ArrayList<Integer> dices)
+    public void r_target_effect(ArrayList<Integer> dice)
     {
-        // random dice from the pool
+        // random die from the pool
         for (int i = 0; i < usages; i++)
         {
             try
             { // effect
-                int target = ((int) (Math.random() * (dices.size()-1)));
-                dices.set(target, dice_change(dices.get(target), -power));
+                int target = ((int) (Math.random() * (dice.size()-1)));
+                dice.set(target, die_change(dice.get(target), -power));
             }
             catch (Exception e){
                 Manager.println("cannot work with dice pool smaller than 2");;
@@ -115,13 +115,13 @@ public class Effect // alpha 2.2
 
         // Functions called by the effects:
 
-    static int dice_change(int dice, int value)
+    static int die_change(int die, int value)
     {
         // used by other effects to change dice to another one
         int address = 0;
-        for (int d : Balance.dices)
+        for (int d : Balance.dice)
         {
-            if (d == dice)
+            if (d == die)
                 break;
             
             address++;
@@ -131,18 +131,18 @@ public class Effect // alpha 2.2
         {
             if (value>0)
             {
-                if (Balance.dices.length-1 == address)
-                    return dice; // if dice is already at max value we cannot upgrade it
+                if (Balance.dice.length-1 == address)
+                    return die; // if dice is already at max value we cannot upgrade it
                 address++;
             }
             else
             {
                 if (0 == address)
-                    return dice; // if dice is already at min value we cannot downgrade it
+                    return die; // if dice is already at min value we cannot downgrade it
                 address--;
             }
-            dice = Balance.dices[address];
+            die = Balance.dice[address];
         }
-        return dice;
+        return die;
     }
 }

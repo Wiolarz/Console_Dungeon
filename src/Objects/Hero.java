@@ -95,7 +95,7 @@ public class Hero extends Unit<Unit>// alpha 2.2
     {
         exp += value * Balance.weak;
         while (exp > (level * Balance.levelup_speed)) {
-            if ((STR+AG+INT) == Balance.dices.length*3){
+            if ((STR+AG+INT) == Balance.dice.length*3){
                 return; // max level
             }
             exp -= (level * Balance.levelup_speed);
@@ -103,9 +103,9 @@ public class Hero extends Unit<Unit>// alpha 2.2
 
 
             ArrayList<Integer> levelups = new ArrayList<>();
-            if (STR < Balance.dices.length) levelups.add(0);
-            if (AG < Balance.dices.length) levelups.add(1);
-            if (INT < Balance.dices.length) levelups.add(2);
+            if (STR < Balance.dice.length) levelups.add(0);
+            if (AG < Balance.dice.length) levelups.add(1);
+            if (INT < Balance.dice.length) levelups.add(2);
             if (levelups.size() > 0){
                 switch (levelups.get((int)((Math.random()*levelups.size())))) {
                     case 0-> STR++;

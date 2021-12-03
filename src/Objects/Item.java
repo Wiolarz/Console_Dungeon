@@ -51,9 +51,9 @@ public class Item // alpha 2.1
         {
             switch (type[counter])
             {
-                case 0-> {if (STR_req!= Balance.dices.length) STR_req++;}
-                case 1-> {if (AG_req!= Balance.dices.length) AG_req++;}
-                case 2-> {if (INT_req!= Balance.dices.length) INT_req++;}
+                case 0-> {if (STR_req!= Balance.dice.length) STR_req++;}
+                case 1-> {if (AG_req!= Balance.dice.length) AG_req++;}
+                case 2-> {if (INT_req!= Balance.dice.length) INT_req++;}
             }
 
             counter++;
@@ -76,11 +76,11 @@ public class Item // alpha 2.1
         INT spawn effect
         */
 
-        generate_dices();
+        generate_dice();
     }
 
 
-    public void generate_dices()
+    public void generate_dice()
     {
         // base pool of dices
         ArrayList<Integer> base = new ArrayList<>();
@@ -88,26 +88,26 @@ public class Item // alpha 2.1
 
 
         // we are adding randomly sized dices to the pool in a number equal to "power" of the item
-        final int len = Balance.dices.length;
-        final int weak_dices =   (len / 4);
-        final int normal_dices = (len / 2);
+        final int len = Balance.dice.length;
+        final int weak_dice =   (len / 4);
+        final int normal_dice = (len / 2);
         //int strong_dices =
 
         // based on statistics we add different types of dices
         for (int i = 0; i < STR_req; i++)  // big sized dices
         {
-            base.add(Balance.dices[(int)(Math.random() * (len - 3)) + 3]); // magic number no sadge
+            base.add(Balance.dice[(int)(Math.random() * (len - 3)) + 3]); // magic number no sadge
         }
 
         for (int i = 0; i < AG_req; i++) // many smaller dices
         {
-            base.add(Balance.dices[(int)(Math.random() * weak_dices)]);
-            base.add(Balance.dices[(int)(Math.random() * normal_dices)]);
+            base.add(Balance.dice[(int)(Math.random() * weak_dice)]);
+            base.add(Balance.dice[(int)(Math.random() * normal_dice)]);
         }
 
         for (int i = 0; i < INT_req; i++)  // magic
         {
-            base.add(Balance.dices[(int)(Math.random() * weak_dices)]);
+            base.add(Balance.dice[(int)(Math.random() * weak_dice)]);
             switch ((int) (Math.random()*3))
             {
                 case 0 -> magic_pool.add(new Effect(1, "edge", 2));
@@ -133,7 +133,7 @@ public class Item // alpha 2.1
         AG_req = AG;
         INT_req = INT;
 
-        generate_dices();
+        generate_dice();
     }
 
 
