@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 public class Hero extends Unit<Unit>// alpha 2.2
 {
-    int level = 1;
     int exp = 0;
     int gold = 0;
 
@@ -29,9 +28,9 @@ public class Hero extends Unit<Unit>// alpha 2.2
         STR = role[0];
         AG = role[1];
         INT = role[2];
+        level = 1;
 
-
-        artefact = new Item(1);
+        artefact = new Item(level);
         artefact.set_stats(STR, AG, INT);
 
 

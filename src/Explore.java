@@ -163,8 +163,10 @@ public class Explore // alpha 2.2
                     {
                         // basic roll for each fighter, if player side succeeds
                         // if success return false
-                        if(!runAway(new ArrayList<>(attacker), new ArrayList<>(defender)))
-                        return "escape";
+                        if(runAway())
+                        {
+                            return "escape";
+                        }
                     }
 
             case 2 -> {
@@ -258,28 +260,15 @@ public class Explore // alpha 2.2
         return world;
     }
 
-    private static <X extends Unit<X>> boolean runAway(ArrayList<X> attacker, ArrayList<X> defender)
+    private static boolean runAway()
     {
-        int defenderLV = 0;
-        int attackerLV = 0;
 
-        for (int i = defender.size() - 1; i >= 0; i--) // getting the sum of lvl's for both groups
-        {
-            defenderLV += defender.get(i).level;
-        }
-        for (int i = attacker.size() - 1; i >= 0; i--)
-        {
-            attackerLV += attacker.get(i).level;
-        }
-
-        int success = (int)(Math.random() * defenderLV) + (int)(0.5 * defenderLV); // the success required for escape
-                                                                                   // rand between 50% and 150% of enemy lvl sum
-        if(attackerLV >= success) // success                                       // 50% chance for success
+        if((int)(Math.random() * 2) == 1) // 50% chance
         {
             Manager.println("You managed to escape");
-            return false;
+            return true;
         }
         Manager.println("You failed to escape");
-        return true; // escape failed
+        return false; // escape failed
     }
 }
